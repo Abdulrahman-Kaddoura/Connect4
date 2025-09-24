@@ -2,6 +2,7 @@
 
 //copy this to immediately compile in terminal
 //gcc -Wall -Werror main.c Connect4.c -o connect4
+//welcome rayan
 void startGame() {
     char Gamemode = '\0';
     char input[10];       
