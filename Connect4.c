@@ -7,18 +7,21 @@
 void startGame() {
     char Gamemode = '\0';
     char input[10];       
-    bool choseMode = false;
+    bool chooseMode = false;
 
-    printf("Welcome to Connect 4!\n");
+    printf("=================================\n");
+    printf("    Welcome to Connect 4!\n");
+    printf("=================================\n");
+    printf("Get 4 pieces in a row to win!\n");
 
-    while (!choseMode) {
+    while (!chooseMode) {
         printf("Select mode:\nPlayer vs Player (P) or Player vs AI (A): ");
 
         if (fgets(input, sizeof(input), stdin)) {
             Gamemode = toupper(input[0]); 
 
             if (Gamemode == 'P') {
-                choseMode = true;
+                chooseMode = true;
                 printf("Starting Player vs Player game...\n");
                 // call your player vs player function here
             } else if (Gamemode == 'A') {
