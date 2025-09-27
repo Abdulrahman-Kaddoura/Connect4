@@ -5,8 +5,13 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+#define ROWS 6
+#define COLS 7
+
 
 void startGame();
+void setupBoard(char board[ROWS][COLS]);
+void printBoard(char board[ROWS][COLS]);
 
 
 #endif
