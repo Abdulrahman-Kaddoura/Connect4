@@ -24,16 +24,10 @@ void printBoard(char board[ROWS][COLS]) {
     }
     printf("\n");
 }
-void startGame() {
+void startMenu() {
     char Gamemode = '\0';
     char input[10];
     bool chooseMode = false;
-
-    char board[ROWS][COLS];
-
-    setupBoard(board);
-    // printBoard(board);         //guys we need to decide where to print the
-    // board, either before choosing the game mode or after
 
     while (!chooseMode) {
         system("clear");
@@ -51,7 +45,16 @@ void startGame() {
             if (Gamemode == 'P') {
                 chooseMode = true;
                 printf("Starting Player vs Player game...\n");
+                sleep(3);
+                system("clear");
+                startGamePvP();
             }
         }
     }
+}
+
+void startGamePvP() {
+    char board[ROWS][COLS];
+    setupBoard(board);
+    printBoard(board);
 }

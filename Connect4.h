@@ -4,12 +4,17 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 #define ROWS 6
 #define COLS 7
 
 
-void startGame();
+void startMenu();
+void startGamePvP();
+void startGameAiEasy();
+void startGameAiMedium();
+void startGameAiHard();
 void setupBoard(char board[ROWS][COLS]);
 void printBoard(char board[ROWS][COLS]);
 
