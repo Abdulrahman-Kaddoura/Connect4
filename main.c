@@ -1,6 +1,6 @@
 #include "Connect4.h"
 
 int main() {
-    startGame();
+    startMenu();
     return 0;
 }
