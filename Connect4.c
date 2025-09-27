@@ -38,6 +38,7 @@ void startGamePvP() {
     setupBoard(board);
     char player = 'A';
     bool gameOver = false;
+    char input[10];
 
     printf("Welcome to Connect Four!\n");
 
@@ -48,19 +49,33 @@ void startGamePvP() {
 
         int colChosen;
         printf("Player %c choose a column (1-7): ", player);
-        scanf("%d", &colChosen);
+        
 
-        bool valid = checkChoice(colChosen, board);
+        if(fgets(input, sizeof(input), stdin)) {
+            if (sscanf(input, "%d", &colChosen) != 1) {
+                printf("Invalid input! Please enter a number.\n");
+                continue;
+            }
+        }
+
+        bool valid =checkChoice(colChosen, board);
         while (!valid) {
             printf("Invalid choice, try again: ");
-            scanf("%d", &colChosen);
+            
+            if(fgets(input, sizeof(input), stdin)){
+                if (sscanf(input, "%d", &colChosen) != 1) {
+                    printf("Please enter a valid number: ");
+                    continue;
+                }
+            }
+            
             valid = checkChoice(colChosen, board);
         }
 
-        makeMove(colChosen, board, player);
+        makeMove(colChosen, player, board);
         numMoves++;
 
-        if (numMoves >= 7 && checkWin(board, player)) {
+        if(numMoves >= 7 && checkWin(player, board)) {
             printBoard(board);
             printf("Player %c wins!\n", player);
             gameOver = true;
