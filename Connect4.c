@@ -1,4 +1,5 @@
 #include "Connect4.h"
+#include <string.h>
 
 //copy this to immediately compile in terminal
 //gcc -Wall -Werror main.c Connect4.c -o connect4
@@ -11,7 +12,7 @@ void startGame() {
     printf("Welcome to Connect 4!\n");
 
     while (!choseMode) {
-        printf("Select mode:\nPlayer vs Player (P)  Vs AI (A): ");
+        printf("Select mode:\nPlayer vs Player (P) or Player vs AI (A): ");
 
         if (fgets(input, sizeof(input), stdin)) {
             Gamemode = toupper(input[0]); 
