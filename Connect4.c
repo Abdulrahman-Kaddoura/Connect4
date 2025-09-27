@@ -2,28 +2,8 @@
 #include <string.h>
 
 // copy this to quickly compile in terminal
-// gcc -Wall -Werror *c -o connect4
+// gcc -Wall -Werror *c -o connect
 
-void setupBoard(char board[ROWS][COLS]) {
-    for (int i = 0; i < ROWS; i++) {
-        for (int j = 0; j < COLS; j++) {
-            board[i][j] = '.';
-        }
-    }
-}
-
-void printBoard(char board[ROWS][COLS]) {
-    for (int i = 0; i < ROWS; i++) {
-        for (int j = 0; j < COLS; j++) {
-            printf("%c ", board[i][j]);
-        }
-        printf("\n");
-    }
-    for (int i = 1; i <= COLS; i++) {
-        printf("%d ", i);
-    }
-    printf("\n");
-}
 void startMenu() {
     char Gamemode = '\0';
     char input[10];
@@ -56,5 +36,41 @@ void startMenu() {
 void startGamePvP() {
     char board[ROWS][COLS];
     setupBoard(board);
-    printBoard(board);
+    char player = 'A';
+    bool gameOver = false;
+
+    printf("Welcome to Connect Four!\n");
+
+    int numMoves = 0;
+
+    while (!gameOver) {
+        printBoard(board);
+
+        int colChosen;
+        printf("Player %c choose a column (1-7): ", player);
+        scanf("%d", &colChosen);
+
+        bool valid = checkChoice(colChosen, board);
+        while (!valid) {
+            printf("Invalid choice, try again: ");
+            scanf("%d", &colChosen);
+            valid = checkChoice(colChosen, board);
+        }
+
+        makeMove(colChosen, board, player);
+        numMoves++;
+
+        if (numMoves >= 7 && checkWin(board, player)) {
+            printBoard(board);
+            printf("Player %c wins!\n", player);
+            gameOver = true;
+        } else if (BoardFull(board)) {
+            printBoard(board);
+            printf("It's a draw!\n");
+            gameOver = true;
+        } else {
+            player = switchPlayer(player); 
+        }
+    }
 }
+

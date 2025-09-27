@@ -11,12 +11,18 @@
 
 
 void startMenu();
+
 void startGamePvP();
-void startGameAiEasy();
-void startGameAiMedium();
-void startGameAiHard();
+// void startGameAiEasy();
+// void startGameAiMedium();
+// void startGameAiHard();
+
 void setupBoard(char board[ROWS][COLS]);
 void printBoard(char board[ROWS][COLS]);
+bool BoardFull(char board[ROWS][COLS]);
 
-
+bool checkChoice(int choice, char board[ROWS][COLS]);
+void makeMove(int col, char player, char board[ROWS][COLS]);
+char switchPlayer(char player);
+bool checkWin(char player, char board[ROWS][COLS]);
 #endif
