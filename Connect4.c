@@ -5,33 +5,45 @@
 // gcc -Wall -Werror *c -o connect
 
 void startMenu() {
-    char Gamemode = '\0';
-    char input[10];
-    bool chooseMode = false;
+    char playAgain = 'Y';
 
-    while (!chooseMode) {
-        system("clear");
+    while (toupper(playAgain) == 'Y') {
+        char Gamemode = '\0';
+        char input[10];
+        bool chooseMode = false;
 
-        printf("=================================\n");
-        printf("    Welcome to Connect 4!\n");
-        printf("=================================\n");
-        printf("Get 4 pieces in a row to win!\n\n");
+        while (!chooseMode) {
+            system("clear");
 
-        printf("Select mode:\nPlayer vs Player (P) or Player vs AI (A): ");
+            printf("=================================\n");
+            printf("    Welcome to Connect 4!\n");
+            printf("=================================\n");
+            printf("Get 4 pieces in a row to win!\n\n");
 
-        if (fgets(input, sizeof(input), stdin)) {
-            Gamemode = toupper(input[0]);
+            printf("Select mode:\nPlayer vs Player (P) or Player vs AI (A): ");
 
-            if (Gamemode == 'P') {
-                chooseMode = true;
-                printf("Starting Player vs Player game...\n");
-                sleep(3);
-                system("clear");
-                startGamePvP();
+            if (fgets(input, sizeof(input), stdin)) {
+                Gamemode = toupper(input[0]);
+
+                if (Gamemode == 'P') {
+                    chooseMode = true;
+                    printf("Starting Player vs Player game...\n");
+                    sleep(2);
+                    system("clear");
+                    startGamePvP();
+                }
             }
         }
+
+        printf("\nPlay again? (Y): ");
+        if (fgets(input, sizeof(input), stdin)) {
+            playAgain = toupper(input[0]);
+        }
     }
+
+    printf("Thanks for playing Connect 4!\n");
 }
+
 
 void startGamePvP() {
     char board[ROWS][COLS];
