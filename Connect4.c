@@ -31,7 +31,7 @@ void startMenu() {
                     sleep(2);
                     system("clear");
                     startGamePvP();
-                } else if(Gamemode== 'A'){
+                } else if (Gamemode == 'A') {
                     printf("AI mode coming soon! Select P for now.\n");
                     sleep(2);
                 }
@@ -46,7 +46,6 @@ void startMenu() {
 
     printf("\nThanks for playing Connect 4!\n\n");
 }
-
 
 void startGamePvP() {
     char board[ROWS][COLS];
