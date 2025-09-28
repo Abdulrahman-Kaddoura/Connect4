@@ -22,7 +22,7 @@ void printBoard(char board[ROWS][COLS]);
 bool BoardFull(char board[ROWS][COLS]);
 
 bool checkChoice(int choice, char board[ROWS][COLS]);
-void makeMove(int col, char player, char board[ROWS][COLS]);
+int makeMove(int col, char player, char board[ROWS][COLS]);
 char switchPlayer(char player);
-bool checkWin(char player, char board[ROWS][COLS]);
+bool checkWin(char player, char board[ROWS][COLS], int last_row, int last_col);
 #endif

@@ -43,6 +43,7 @@ void startGamePvP() {
     printf("Welcome to Connect Four!\n");
 
     int numMoves = 0;
+    int rowPlaced;
 
     while (!gameOver) {
         printBoard(board);
@@ -71,10 +72,11 @@ void startGamePvP() {
             valid = checkChoice(colChosen, board);
         }
 
-        makeMove(colChosen, player, board);
+        rowPlaced = makeMove(colChosen, player, board);
         numMoves++;
 
-        if (numMoves >= 7 && checkWin(player, board)) {
+        if (numMoves >= 7 &&
+            checkWin(player, board, rowPlaced, colChosen - 1)) {
             printBoard(board);
             printf("Player %c wins!\n", player);
             gameOver = true;

@@ -35,14 +35,15 @@ bool checkChoice(int col, char board[ROWS][COLS]) {
     return true;
 }
 
-void makeMove(int col, char player, char board[ROWS][COLS]) {
+int makeMove(int col, char player, char board[ROWS][COLS]) {
     int colIndex = col - 1;
     for (int i = ROWS - 1; i >= 0; i--) {
         if (board[i][colIndex] == '.') {
             board[i][colIndex] = player;
-            break;
+            return i;
         }
     }
+    return -1;
 }
 
 char switchPlayer(char player) {
@@ -62,4 +63,46 @@ bool BoardFull(char board[ROWS][COLS]) {
     return true;
 }
 
-bool checkWin(char player, char board[ROWS][COLS]) { return false; }
+bool checkWin(char player, char board[ROWS][COLS], int last_row, int last_col) {
+    int r, c;
+    int count;
+
+    int directions[4][2] = {
+        {0, 1}, // Horizontal
+        {1, 0}, // Vertical
+        {1, 1}, // Diagonal
+        {1, -1} // Diagonal
+    };
+
+    for (int d = 0; d < 4; d++) {
+        int dr = directions[d][0];
+        int dc = directions[d][1];
+        count = 1; // Include the last piece itself
+
+        // Check one direction
+        r = last_row + dr;
+        c = last_col + dc;
+        while (r >= 0 && r < ROWS && c >= 0 && c < COLS &&
+               board[r][c] == player) {
+            count++;
+            r += dr;
+            c += dc;
+        }
+
+        // Check opposite direction
+        r = last_row - dr;
+        c = last_col - dc;
+        while (r >= 0 && r < ROWS && c >= 0 && c < COLS &&
+               board[r][c] == player) {
+            count++;
+            r -= dr;
+            c -= dc;
+        }
+
+        if (count >= 4) {
+            return true; // Win found
+        }
+    }
+
+    return false; // No win
+}
