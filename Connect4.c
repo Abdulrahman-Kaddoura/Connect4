@@ -31,6 +31,9 @@ void startMenu() {
                     sleep(2);
                     system("clear");
                     startGamePvP();
+                } else if(Gamemode== 'A'){
+                    printf("AI mode coming soon! Select P for now.\n");
+                    sleep(2);
                 }
             }
         }
@@ -90,7 +93,7 @@ void startGamePvP() {
         if (numMoves >= 7 &&
             checkWin(player, board, rowPlaced, colChosen - 1)) {
             printBoard(board);
-            printf("Player %c wins!\n", player);
+            printf("\nPlayer %c wins!\n", player);
             gameOver = true;
         } else if (BoardFull(board)) {
             printBoard(board);
