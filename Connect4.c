@@ -21,6 +21,7 @@ void startMenu() {
             printf("Get 4 pieces in a row to win!\n\n");
 
             printf("Select mode:\nPlayer vs Player (P) or Player vs AI (A): ");
+            fflush(stdout);
 
             if (fgets(input, sizeof(input), stdin)) {
                 Gamemode = toupper(input[0]);
