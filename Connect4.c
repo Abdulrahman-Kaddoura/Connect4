@@ -33,7 +33,7 @@ void startMenu() {
                     startGamePvP();
                 } else if (Gamemode == 'A') {
                     printf("AI mode coming soon! Select P for now.\n");
-                    sleep(2);
+                    sleep(1);
                 }
             }
         }
