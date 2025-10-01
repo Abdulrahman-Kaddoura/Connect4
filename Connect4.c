@@ -65,8 +65,8 @@ void startGamePvP() {
         int colChosen;
         printf("Player %c choose a column (1-7): ", player);
 
-        if(fgets(input, sizeof(input), stdin)){
-            if(sscanf(input, "%d", &colChosen) != 1) {
+        if (fgets(input, sizeof(input), stdin)) {
+            if (sscanf(input, "%d", &colChosen) != 1) {
                 printf("Invalid input! Please enter a number.\n");
                 continue;
             }
@@ -76,8 +76,8 @@ void startGamePvP() {
         while (!valid) {
             printf("Invalid choice, try again: ");
 
-            if(fgets(input, sizeof(input), stdin)){
-                if(sscanf(input, "%d", &colChosen) !=1){
+            if (fgets(input, sizeof(input), stdin)) {
+                if (sscanf(input, "%d", &colChosen) != 1) {
                     printf("Please enter a valid number: ");
                     continue;
                 }
