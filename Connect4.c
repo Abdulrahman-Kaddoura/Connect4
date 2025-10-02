@@ -65,10 +65,12 @@ void startGamePvP() {
 
         int colChosen;
         printf("Player %c choose a column (1-7): ", player);
+        fflush(stdout);
 
         if (fgets(input, sizeof(input), stdin)) {
             if (sscanf(input, "%d", &colChosen) != 1) {
                 printf("Invalid input! Please enter a number.\n");
+                fflush(stdout);
                 continue;
             }
         }
@@ -76,10 +78,12 @@ void startGamePvP() {
         bool valid = checkChoice(colChosen, board);
         while (!valid) {
             printf("Invalid choice, try again: ");
+            fflush(stdout);
 
             if (fgets(input, sizeof(input), stdin)) {
                 if (sscanf(input, "%d", &colChosen) != 1) {
                     printf("Please enter a valid number: ");
+                    fflush(stdout);
                     continue;
                 }
             }
@@ -94,10 +98,12 @@ void startGamePvP() {
             checkWin(player, board, rowPlaced, colChosen - 1)) {
             printBoard(board);
             printf("\nPlayer %c wins!\n", player);
+            fflush(stdout);
             gameOver = true;
         } else if (BoardFull(board)) {
             printBoard(board);
             printf("It's a draw!\n");
+            fflush(stdout);
             gameOver = true;
         } else {
             player = switchPlayer(player);

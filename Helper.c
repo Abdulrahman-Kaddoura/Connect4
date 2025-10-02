@@ -19,6 +19,7 @@ void printBoard(char board[ROWS][COLS]) {
         printf("%d ", i);
     }
     printf("\n");
+    fflush(stdout);
 }
 
 bool checkChoice(int col, char board[ROWS][COLS]) {
