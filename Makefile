@@ -18,5 +18,5 @@ $(TARGET): $(SRCS)
 	$(CC) $(CFLAGS) $(SRCS) -o $(TARGET)
 
 # Clean compiled files
-clean:
-	rm -f $(TARGET)
+# clean:
+# 	rm -f $(TARGET)
