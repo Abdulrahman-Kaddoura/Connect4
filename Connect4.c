@@ -5,44 +5,35 @@
 // gcc -Wall -Werror *c -o connect
 
 void startMenu() {
-    char playAgain = 'Y';
 
-    while (toupper(playAgain) == 'Y') {
-        char Gamemode = '\0';
-        char input[10];
-        bool chooseMode = false;
+    char Gamemode = '\0';
+    char input[10];
+    bool chooseMode = false;
 
-        while (!chooseMode) {
-            system("clear");
+    while (!chooseMode) {
+        system("clear");
 
-            printf("=================================\n");
-            printf("    Welcome to Connect 4!\n");
-            printf("=================================\n");
-            printf("Get 4 pieces in a row to win!\n\n");
+        printf("=================================\n");
+        printf("    Welcome to Connect 4!\n");
+        printf("=================================\n");
+        printf("Get 4 pieces in a row to win!\n\n");
 
-            printf("Select mode:\nPlayer vs Player (P) or Player vs AI (A): ");
-            fflush(stdout);
-
-            if (fgets(input, sizeof(input), stdin)) {
-                Gamemode = toupper(input[0]);
-
-                if (Gamemode == 'P') {
-                    chooseMode = true;
-                    printf("Starting Player vs Player game...\n");
-                    sleep(2);
-                    system("clear");
-                    startGamePvP();
-                } else if (Gamemode == 'A') {
-                    printf("AI mode coming soon! Select P for now.\n");
-                    sleep(1);
-                }
-            }
-        }
-
-        printf("\nPlay again? (Y): ");
+        printf("Select mode:\nPlayer vs Player (P) or Player vs AI (A): ");
         fflush(stdout);
+
         if (fgets(input, sizeof(input), stdin)) {
-            playAgain = toupper(input[0]);
+            Gamemode = toupper(input[0]);
+
+            if (Gamemode == 'P') {
+                chooseMode = true;
+                printf("Starting Player vs Player game...\n");
+                sleep(2);
+                system("clear");
+                startGamePvP();
+            } else if (Gamemode == 'A') {
+                printf("AI mode coming soon! Select P for now.\n");
+                sleep(1);
+            }
         }
     }
 
