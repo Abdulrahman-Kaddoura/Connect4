@@ -40,6 +40,7 @@ void startMenu() {
         }
 
         printf("\nPlay again? (Y): ");
+        fflush(stdout);
         if (fgets(input, sizeof(input), stdin)) {
             playAgain = toupper(input[0]);
         }
