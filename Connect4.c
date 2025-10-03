@@ -94,7 +94,7 @@ void startGamePvP() {
             gameOver = true;
         } else if (BoardFull(board)) {
             printBoard(board);
-            printf("It's a draw!\n");
+            printf("\nIt's a draw!\n");
             fflush(stdout);
             gameOver = true;
         } else {
