@@ -5,7 +5,7 @@ TARGET = connect
 CC = gcc
 
 # Compiler flags
-CFLAGS = -Wall -Werror
+CFLAGS = -Wall -Werror -g
 
 # Source files
 SRCS = Connect4.c main.c Helper.c
