@@ -5,7 +5,7 @@ clear
 cd /root/Connect4_CMPS241project || exit 1
 
 # Compile the source code every time
-gcc connect4.c -o connect
+gcc Connect4.c -o connect
 
 # Check if compilation succeeded
 if [ $? -eq 0 ]; then
