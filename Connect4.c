@@ -31,7 +31,13 @@ void startMenu() {
                 system("clear");
                 startGamePvP();
             } else if (Gamemode == 'A') {
-                printf("AI mode coming soon! Select P for now.\n");
+                chooseMode = true;
+                printf("Starting Player vs AI game...\n");
+                sleep(2);
+                system("clear");
+                // startGameAiEasy();
+            } else {
+                printf("Invalid choice! Please enter P or A,\n");
                 sleep(1);
             }
         }
@@ -99,6 +105,34 @@ void startGamePvP() {
             gameOver = true;
         } else {
             player = switchPlayer(player);
+        }
+    }
+}
+
+void selectDifficulty(){
+    char input[10];
+    char difficulty = '\0';
+    bool diff_selected = false;
+
+    while(!diff_selected){
+        system("clear");
+        printf("Select AI difficulty: \n");
+        printf("Easy(E) - Medium(M) - Hard(H): ");
+        fflush(stdout);
+
+        if(fgets(input, sizeof(input), stdin)){
+            difficulty = toupper(input[0]);
+            if(difficulty == 'E'){
+                diff_selected =true;
+                printf("Starting game in easy mode...\n");
+                sleep(2);
+            } else if(difficulty == 'M'|| difficulty == 'H'){
+                printf("Medium and Hard are currently unavailable. Select (E) for now.\n");
+                sleep(2);
+            } else {
+                printf("Invalid input, please enter E, M or H.\n");
+                sleep(1);
+            }
         }
     }
 }
