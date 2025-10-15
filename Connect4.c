@@ -35,7 +35,7 @@ void startMenu() {
                 printf("Starting Player vs AI game...\n");
                 sleep(2);
                 system("clear");
-                // startGameAiEasy();
+                selectDifficulty();
             } else {
                 printf("Invalid choice! Please enter P or A,\n");
                 sleep(1);
@@ -109,30 +109,56 @@ void startGamePvP() {
     }
 }
 
-void selectDifficulty(){
+void startGameAi(Difficulty difficulty) {
+    char board[ROWS][COLS];
+    setupBoard(board);
+    char player = 'A';
+    bool gameOver = false;
     char input[10];
-    char difficulty = '\0';
-    bool diff_selected = false;
 
-    while(!diff_selected){
-        system("clear");
-        printf("Select AI difficulty: \n");
-        printf("Easy(E) - Medium(M) - Hard(H): ");
-        fflush(stdout);
+    printf("Welcome to Connect Four!\n");
 
-        if(fgets(input, sizeof(input), stdin)){
-            difficulty = toupper(input[0]);
-            if(difficulty == 'E'){
-                diff_selected =true;
-                printf("Starting game in easy mode...\n");
-                sleep(2);
-            } else if(difficulty == 'M'|| difficulty == 'H'){
-                printf("Medium and Hard are currently unavailable. Select (E) for now.\n");
-                sleep(2);
+    int numMoves = 0;
+    int rowPlaced;
+    
+    while(!gameOver) {
+        printBoard(board);
+
+        int colChosen;
+        
+        if (player == 'A') { //player is A, AI is B
+            //implement player move logic here
+            //its almost exactly like the one in the pvp mode
+        } else { 
+            printf("AI is thinking\n");
+            fflush(stdout);
+            sleep(1);
+
+            colChosen = getAIMove(board, difficulty);
+            printf("AI chooses column %d\n", colChosen);
+            fflush(stdout);
+        }
+
+        rowPlaced = makeMove(colChosen, player, board);
+        numMoves++;
+
+        if (numMoves >= 7 &&
+            checkWin(player, board, rowPlaced, colChosen - 1)) {
+            printBoard(board);
+            if (player == 'A') {
+                printf("\nYou win!\n");
             } else {
-                printf("Invalid input, please enter E, M or H.\n");
-                sleep(1);
+                printf("\nAI wins!\n");
             }
+            fflush(stdout);
+            gameOver = true;
+        } else if (BoardFull(board)) {
+            printBoard(board);
+            printf("\nIt's a draw!\n");
+            fflush(stdout);
+            gameOver = true;
+        } else {
+            player = switchPlayer(player);
         }
     }
 }

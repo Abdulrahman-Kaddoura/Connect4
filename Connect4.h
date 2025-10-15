@@ -9,13 +9,18 @@
 #define ROWS 6
 #define COLS 7
 
+typedef enum Difficulty {
+    EASY = 1,
+    MEDIUM,
+    HARD
+} Difficulty;
 
 void startMenu();
+void selectDifficulty();
 
 void startGamePvP();
-// void startGameAiEasy();
-// void startGameAiMedium();
-// void startGameAiHard();
+void startGameAi(Difficulty difficulty);
+int getAIMove(char board[ROWS][COLS], Difficulty difficulty);
 
 void setupBoard(char board[ROWS][COLS]);
 void printBoard(char board[ROWS][COLS]);

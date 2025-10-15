@@ -1,5 +1,47 @@
 #include "Connect4.h"
 
+void selectDifficulty() {
+    char input[10];
+    char difficulty = '\0';
+    bool diff_selected = false;
+
+    while (!diff_selected) {
+        system("clear");
+        printf("Select AI difficulty: \n");
+        printf("Easy(E) - Medium(M) - Hard(H): ");
+        fflush(stdout);
+
+        if (fgets(input, sizeof(input), stdin)) {
+            difficulty = toupper(input[0]);
+            if (difficulty == 'E') {
+                diff_selected = true;
+                printf("Starting game in easy mode...\n");
+                sleep(2);
+                startGameAi(EASY);
+            } else if (difficulty == 'M') {
+                printf("MEDIUM mode is currently unavailable. Please select "
+                       "(E).\n");
+                sleep(2);
+                // startGameAi(MEDIUM);
+            } else if (difficulty == 'H') {
+                printf(
+                    "HARD mode is currently unavailable. Please select (E).\n");
+                sleep(2);
+                // startGameAi(HARD);
+            } else {
+                printf("Invalid input, please enter E, M or H.\n");
+                sleep(1);
+            }
+        }
+    }
+}
+
+int getAIMove(char board[ROWS][COLS], Difficulty difficulty) {
+    //implement here, get random num from a random num generator between 1 and 7.
+    //before returning check if valid using the checkChoice(int col, char board[ROWS][COLS]) function
+    //loop with while until valid choice
+}
+
 void setupBoard(char board[ROWS][COLS]) {
     for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLS; j++) {
