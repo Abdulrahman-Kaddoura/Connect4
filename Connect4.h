@@ -9,6 +9,13 @@
 #define ROWS 6
 #define COLS 7
 
+#define COLOR_RESET   "\033[0m"
+#define COLOR_RED     "\033[31m"
+#define COLOR_YELLOW  "\033[33m"
+
+extern bool highlight[ROWS][COLS];
+
+
 typedef enum Difficulty {
     EASY = 1,
     MEDIUM,

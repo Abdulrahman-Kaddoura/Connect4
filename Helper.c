@@ -37,9 +37,9 @@ void selectDifficulty() {
 }
 
 int getAIMove(char board[ROWS][COLS], Difficulty difficulty) {
-    //implement here, get random num from a random num generator between 1 and 7.
-    //before returning check if valid using the checkChoice(int col, char board[ROWS][COLS]) function
-    //loop with while until valid choice
+    // implement here, get random num from a random num generator between 1
+    // and 7. before returning check if valid using the checkChoice(int col,
+    // char board[ROWS][COLS]) function loop with while until valid choice
 }
 
 void setupBoard(char board[ROWS][COLS]) {
@@ -53,14 +53,23 @@ void setupBoard(char board[ROWS][COLS]) {
 void printBoard(char board[ROWS][COLS]) {
     for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLS; j++) {
-            printf("%c ", board[i][j]);
+            char piece = board[i][j];
+            if (highlight[i][j]) { 
+                if (piece == 'A')
+                    printf(COLOR_RED "%c " COLOR_RESET, piece);
+                else if (piece == 'B')
+                    printf(COLOR_YELLOW "%c " COLOR_RESET, piece);
+            } else {
+                printf("%c ", piece);
+            }
         }
         printf("\n");
     }
-    for (int i = 1; i <= COLS; i++) {
+
+    for (int i = 1; i <= COLS; i++)
         printf("%d ", i);
-    }
     printf("\n");
+
     fflush(stdout);
 }
 
@@ -106,9 +115,16 @@ bool BoardFull(char board[ROWS][COLS]) {
     return true;
 }
 
+bool highlight[ROWS][COLS] = {false};
+
 bool checkWin(char player, char board[ROWS][COLS], int last_row, int last_col) {
     int r, c;
     int count;
+
+    // Reset highlights every check
+    for (int i = 0; i < ROWS; i++)
+        for (int j = 0; j < COLS; j++)
+            highlight[i][j] = false;
 
     int directions[4][2] = {
         {0, 1}, // Horizontal
@@ -120,39 +136,51 @@ bool checkWin(char player, char board[ROWS][COLS], int last_row, int last_col) {
     for (int d = 0; d < 4; d++) {
         int dr = directions[d][0];
         int dc = directions[d][1];
-        count = 1; 
+        count = 1;
 
-        // Check one direction
+        int coords[7][2];
+        int coordCount = 0;
+
+        coords[coordCount][0] = last_row;
+        coords[coordCount][1] = last_col;
+        coordCount++;
+
         r = last_row + dr;
         c = last_col + dc;
         while (r >= 0 && r < ROWS && c >= 0 && c < COLS &&
                board[r][c] == player) {
+            coords[coordCount][0] = r;
+            coords[coordCount][1] = c;
+            coordCount++;
             count++;
             r += dr;
             c += dc;
         }
 
-        // Check opposite direction
         r = last_row - dr;
         c = last_col - dc;
         while (r >= 0 && r < ROWS && c >= 0 && c < COLS &&
                board[r][c] == player) {
+            coords[coordCount][0] = r;
+            coords[coordCount][1] = c;
+            coordCount++;
             count++;
             r -= dr;
             c -= dc;
         }
 
         if (count >= 4) {
-            return true; 
+            for (int k = 0; k < coordCount; k++)
+                highlight[coords[k][0]][coords[k][1]] = true;
+            return true;
         }
     }
-
     return false;
 }
 
 void sleepSeconds(double seconds) {
     struct timespec ts;
-    ts.tv_sec = (time_t)seconds; //seconds
+    ts.tv_sec = (time_t)seconds;                      // seconds
     ts.tv_nsec = (long)((seconds - ts.tv_sec) * 1e9); // nanoseconds
     nanosleep(&ts, NULL);
 }
