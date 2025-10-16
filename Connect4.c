@@ -1,5 +1,4 @@
 #include "Connect4.h"
-#include <string.h>
 
 // copy this to quickly compile in terminal
 // gcc -Wall -Werror *c -o connect
@@ -27,18 +26,18 @@ void startMenu() {
             if (Gamemode == 'P') {
                 chooseMode = true;
                 printf("Starting Player vs Player game...\n");
-                sleep(2);
+                sleepSeconds(1.5);
                 system("clear");
                 startGamePvP();
             } else if (Gamemode == 'A') {
                 chooseMode = true;
                 printf("Starting Player vs AI game...\n");
-                sleep(2);
+                sleepSeconds(1.5);
                 system("clear");
                 selectDifficulty();
             } else {
                 printf("Invalid choice! Please enter P or A,\n");
-                sleep(1);
+                sleepSeconds(1);
             }
         }
     }
@@ -132,7 +131,7 @@ void startGameAi(Difficulty difficulty) {
         } else { 
             printf("AI is thinking\n");
             fflush(stdout);
-            sleep(1);
+            sleepSeconds(1.0);
 
             colChosen = getAIMove(board, difficulty);
             printf("AI chooses column %d\n", colChosen);

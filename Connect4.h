@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdbool.h>
-#include <unistd.h>
+#include <time.h>
 
 #define ROWS 6
 #define COLS 7
@@ -14,6 +14,8 @@ typedef enum Difficulty {
     MEDIUM,
     HARD
 } Difficulty;
+
+void sleepSeconds(double seconds);
 
 void startMenu();
 void selectDifficulty();

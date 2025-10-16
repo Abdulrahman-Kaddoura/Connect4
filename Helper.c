@@ -16,21 +16,21 @@ void selectDifficulty() {
             if (difficulty == 'E') {
                 diff_selected = true;
                 printf("Starting game in easy mode...\n");
-                sleep(2);
+                sleepSeconds(1.5);
                 startGameAi(EASY);
             } else if (difficulty == 'M') {
                 printf("MEDIUM mode is currently unavailable. Please select "
                        "(E).\n");
-                sleep(2);
+                sleepSeconds(1.5);
                 // startGameAi(MEDIUM);
             } else if (difficulty == 'H') {
                 printf(
                     "HARD mode is currently unavailable. Please select (E).\n");
-                sleep(2);
+                sleepSeconds(1.5);
                 // startGameAi(HARD);
             } else {
                 printf("Invalid input, please enter E, M or H.\n");
-                sleep(1);
+                sleepSeconds(1.5);
             }
         }
     }
@@ -120,7 +120,7 @@ bool checkWin(char player, char board[ROWS][COLS], int last_row, int last_col) {
     for (int d = 0; d < 4; d++) {
         int dr = directions[d][0];
         int dc = directions[d][1];
-        count = 1; // Include the last piece itself
+        count = 1; 
 
         // Check one direction
         r = last_row + dr;
@@ -143,9 +143,16 @@ bool checkWin(char player, char board[ROWS][COLS], int last_row, int last_col) {
         }
 
         if (count >= 4) {
-            return true; // Win found
+            return true; 
         }
     }
 
-    return false; // No win
+    return false;
+}
+
+void sleepSeconds(double seconds) {
+    struct timespec ts;
+    ts.tv_sec = (time_t)seconds; //seconds
+    ts.tv_nsec = (long)((seconds - ts.tv_sec) * 1e9); // nanoseconds
+    nanosleep(&ts, NULL);
 }
