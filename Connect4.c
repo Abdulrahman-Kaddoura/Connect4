@@ -161,3 +161,4 @@ void startGameAi(Difficulty difficulty) {
         }
     }
 }
+// get my status
