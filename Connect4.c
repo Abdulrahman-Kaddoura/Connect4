@@ -126,8 +126,33 @@ void startGameAi(Difficulty difficulty) {
         int colChosen;
         
         if (player == 'A') { //player is A, AI is B
-            //implement player move logic here
             //its almost exactly like the one in the pvp mode
+            printf("Player %c choose a column (1-7): ", player);
+            fflush(stdout);
+
+            if (fgets(input, sizeof(input), stdin)) {
+                if (sscanf(input, "%d", &colChosen) != 1) {
+                    printf("Invalid input! Please enter a number.\n");
+                    fflush(stdout);
+                    continue;
+                }
+            }
+
+            bool valid = checkChoice(colChosen, board);
+            while (!valid) {
+                printf("Invalid choice, try again: ");
+                fflush(stdout);
+
+                if (fgets(input, sizeof(input), stdin)) {
+                    if (sscanf(input, "%d", &colChosen) != 1) {
+                        printf("Please enter a valid number: ");
+                        fflush(stdout);
+                        continue;
+                    }
+                }
+
+                valid = checkChoice(colChosen, board);
+            }
         } else { 
             printf("AI is thinking\n");
             fflush(stdout);
