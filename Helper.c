@@ -40,6 +40,7 @@ int getAIMove(char board[ROWS][COLS], Difficulty difficulty) {
     // implement here, get random num from a random num generator between 1
     // and 7. before returning check if valid using the checkChoice(int col,
     // char board[ROWS][COLS]) function loop with while until valid choice
+    return 1;
 }
 
 void setupBoard(char board[ROWS][COLS]) {
@@ -54,11 +55,13 @@ void printBoard(char board[ROWS][COLS]) {
     for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLS; j++) {
             char piece = board[i][j];
-            if (highlight[i][j]) { 
-                if (piece == 'A')
+            if (highlight[i][j]) {
+                if (piece == 'A') {
                     printf(COLOR_RED "%c " COLOR_RESET, piece);
-                else if (piece == 'B')
+                }
+                else if (piece == 'B') {
                     printf(COLOR_YELLOW "%c " COLOR_RESET, piece);
+                }
             } else {
                 printf("%c ", piece);
             }
@@ -66,8 +69,9 @@ void printBoard(char board[ROWS][COLS]) {
         printf("\n");
     }
 
-    for (int i = 1; i <= COLS; i++)
+    for (int i = 1; i <= COLS; i++) {
         printf("%d ", i);
+    }
     printf("\n");
 
     fflush(stdout);
@@ -122,9 +126,11 @@ bool checkWin(char player, char board[ROWS][COLS], int last_row, int last_col) {
     int count;
 
     // Reset highlights every check
-    for (int i = 0; i < ROWS; i++)
-        for (int j = 0; j < COLS; j++)
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
             highlight[i][j] = false;
+        }
+    }
 
     int directions[4][2] = {
         {0, 1}, // Horizontal
@@ -170,8 +176,9 @@ bool checkWin(char player, char board[ROWS][COLS], int last_row, int last_col) {
         }
 
         if (count >= 4) {
-            for (int k = 0; k < coordCount; k++)
+            for (int k = 0; k < coordCount; k++) {
                 highlight[coords[k][0]][coords[k][1]] = true;
+            }
             return true;
         }
     }

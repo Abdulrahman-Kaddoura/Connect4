@@ -1,7 +1,5 @@
 #include "Connect4.h"
 
-// copy this to quickly compile in terminal
-// gcc -Wall -Werror *c -o connect
 
 void startMenu() {
 
@@ -119,14 +117,13 @@ void startGameAi(Difficulty difficulty) {
 
     int numMoves = 0;
     int rowPlaced;
-    
-    while(!gameOver) {
+
+    while (!gameOver) {
         printBoard(board);
 
         int colChosen;
-        
-        if (player == 'A') { //player is A, AI is B
-            //its almost exactly like the one in the pvp mode
+
+        if (player == 'A') { // human is A, AI is B
             printf("Player %c choose a column (1-7): ", player);
             fflush(stdout);
 
@@ -153,7 +150,7 @@ void startGameAi(Difficulty difficulty) {
 
                 valid = checkChoice(colChosen, board);
             }
-        } else { 
+        } else {
             printf("AI is thinking\n");
             fflush(stdout);
             sleepSeconds(1.0);
@@ -186,4 +183,3 @@ void startGameAi(Difficulty difficulty) {
         }
     }
 }
-// get my status
