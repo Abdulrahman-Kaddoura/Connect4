@@ -12,7 +12,7 @@ void startMenu() {
 
         printf("=================================\n");
         printf("    Welcome to Connect 4!\n");
-        printf("=================================\n");
+        printf("=================================\n\n");
         printf("Get 4 pieces in a row to win!\n\n");
 
         printf("Select mode:\nPlayer vs Player (P) or Player vs AI (A): ");
