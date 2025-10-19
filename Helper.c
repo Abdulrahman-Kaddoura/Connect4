@@ -37,10 +37,13 @@ void selectDifficulty() {
 }
 
 int getAIMove(char board[ROWS][COLS], Difficulty difficulty) {
-    // implement here, get random num from a random num generator between 1
-    // and 7. before returning check if valid using the checkChoice(int col,
-    // char board[ROWS][COLS]) function loop with while until valid choice
-    return 1;
+    nt col;
+    do{
+        col = (rand() % COLS) +1;
+    }
+    while(!checkChoice(col, board));
+
+    return col
 }
 
 void setupBoard(char board[ROWS][COLS]) {
