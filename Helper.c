@@ -37,7 +37,7 @@ void selectDifficulty() {
 }
 
 int getAIMove(char board[ROWS][COLS], Difficulty difficulty) {
-    nt col;
+    int col;
     do{
         col = (rand() % COLS) +1;
     }
