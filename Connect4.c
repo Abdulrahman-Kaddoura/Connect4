@@ -172,11 +172,13 @@ void startGameAi(Difficulty difficulty) {
                 printf("\nAI wins!\n");
             }
             fflush(stdout);
+            sleepSeconds(1.5);
             gameOver = true;
         } else if (BoardFull(board)) {
             printBoard(board);
             printf("\nIt's a draw!\n");
             fflush(stdout);
+            sleepSeconds(1.5);
             gameOver = true;
         } else {
             player = switchPlayer(player);
