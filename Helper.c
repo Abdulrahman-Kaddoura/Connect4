@@ -38,12 +38,11 @@ void selectDifficulty() {
 
 int getAIMove(char board[ROWS][COLS], Difficulty difficulty) {
     int col;
-    do{
-        col = (rand() % COLS) +1;
-    }
-    while(!checkChoice(col, board));
+    do {
+        col = (rand() % COLS) + 1;
+    } while (!checkChoice(col, board));
 
-    return col
+    return col;
 }
 
 void setupBoard(char board[ROWS][COLS]) {
@@ -61,8 +60,7 @@ void printBoard(char board[ROWS][COLS]) {
             if (highlight[i][j]) {
                 if (piece == 'A') {
                     printf(COLOR_RED "%c " COLOR_RESET, piece);
-                }
-                else if (piece == 'B') {
+                } else if (piece == 'B') {
                     printf(COLOR_YELLOW "%c " COLOR_RESET, piece);
                 }
             } else {
