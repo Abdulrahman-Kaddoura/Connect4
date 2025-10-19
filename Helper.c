@@ -15,7 +15,7 @@ void selectDifficulty() {
             difficulty = toupper(input[0]);
             if (difficulty == 'E') {
                 diff_selected = true;
-                printf("Starting game in easy mode...\n");
+                printf("Starting game in easy mode...\n\n");
                 sleepSeconds(1.5);
                 startGameAi(EASY);
             } else if (difficulty == 'M') {
@@ -37,6 +37,7 @@ void selectDifficulty() {
 }
 
 int getAIMove(char board[ROWS][COLS], Difficulty difficulty) {
+    (void)difficulty;
     int col;
     do {
         col = (rand() % COLS) + 1;
