@@ -23,6 +23,7 @@ typedef enum Difficulty {
 } Difficulty;
 
 void sleepSeconds(double seconds);
+void clearScreen();
 
 void startMenu();
 void selectDifficulty();

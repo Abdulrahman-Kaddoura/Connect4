@@ -6,7 +6,7 @@ void selectDifficulty() {
     bool diff_selected = false;
 
     while (!diff_selected) {
-        system("clear");
+        clearScreen();
         printf("Select AI difficulty: \n");
         printf("Easy(E) - Medium(M) - Hard(H): ");
         fflush(stdout);
@@ -192,4 +192,8 @@ void sleepSeconds(double seconds) {
     ts.tv_sec = (time_t)seconds;                      // seconds
     ts.tv_nsec = (long)((seconds - ts.tv_sec) * 1e9); // nanoseconds
     nanosleep(&ts, NULL);
+}
+
+void clearScreen() {
+    printf("\033[H\033[J");
 }

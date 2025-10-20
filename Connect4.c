@@ -8,7 +8,7 @@ void startMenu() {
     bool chooseMode = false;
 
     while (!chooseMode) {
-        system("clear");
+        clearScreen();
 
         printf("=================================\n");
         printf("    Welcome to Connect 4!\n");
@@ -25,13 +25,13 @@ void startMenu() {
                 chooseMode = true;
                 printf("Starting Player vs Player game...\n");
                 sleepSeconds(1.5);
-                system("clear");
+                clearScreen();
                 startGamePvP();
             } else if (Gamemode == 'A') {
                 chooseMode = true;
                 printf("Starting Player vs AI game...\n");
                 sleepSeconds(1.5);
-                system("clear");
+                clearScreen();
                 selectDifficulty();
             } else {
                 printf("Invalid choice! Please enter P or A,\n");
