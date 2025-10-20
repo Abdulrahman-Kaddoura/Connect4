@@ -37,12 +37,19 @@ void selectDifficulty() {
 }
 
 int getAIMove(char board[ROWS][COLS], Difficulty difficulty) {
-    (void)difficulty;
+    if (difficulty == EASY) {
+        return getAIMoveEasy(board);
+    } else if (difficulty == MEDIUM) {
+        return getAIMoveEasy(board); // change when implementing medium bot
+    } else {
+        return getAIMoveEasy(board); // change when implementing hard bot
+    }
+}
+int getAIMoveEasy(char board[ROWS][COLS]) {
     int col;
     do {
         col = (rand() % COLS) + 1;
     } while (!checkChoice(col, board));
-
     return col;
 }
 
@@ -194,6 +201,4 @@ void sleepSeconds(double seconds) {
     nanosleep(&ts, NULL);
 }
 
-void clearScreen() {
-    printf("\033[H\033[J");
-}
+void clearScreen() { printf("\033[H\033[J"); }
