@@ -45,6 +45,7 @@ int getAIMove(char board[ROWS][COLS], Difficulty difficulty) {
         return getAIMoveEasy(board); // change when implementing hard bot
     }
 }
+
 int getAIMoveEasy(char board[ROWS][COLS]) {
     int col;
     do {
