@@ -151,12 +151,12 @@ void startGameAi(Difficulty difficulty) {
                 valid = checkChoice(colChosen, board);
             }
         } else {
-            printf("AI is thinking\n");
+            printf("\nAI is thinking...\n");
             fflush(stdout);
             sleepSeconds(1.0);
 
             colChosen = getAIMove(board, difficulty);
-            printf("AI chooses column %d\n", colChosen);
+            printf("\nAI chooses column %d\n\n", colChosen);
             fflush(stdout);
         }
 
