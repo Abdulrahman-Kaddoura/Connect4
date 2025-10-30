@@ -1,26 +1,21 @@
 #ifndef CONNECT4_H
 #define CONNECT4_H
-#include <stdio.h>
-#include <stdlib.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 
 #define ROWS 6
 #define COLS 7
 
-#define COLOR_RESET   "\033[0m"
-#define COLOR_RED     "\033[31m"
-#define COLOR_YELLOW  "\033[33m"
+#define COLOR_RESET "\033[0m"
+#define COLOR_RED "\033[31m"
+#define COLOR_YELLOW "\033[33m"
 
 extern bool highlight[ROWS][COLS];
 
-
-typedef enum Difficulty {
-    EASY = 1,
-    MEDIUM,
-    HARD
-} Difficulty;
+typedef enum Difficulty { EASY = 1, MEDIUM, HARD } Difficulty;
 
 void sleepSeconds(double seconds);
 void clearScreen();
@@ -33,6 +28,11 @@ void startGameAi(Difficulty difficulty);
 int getAIMove(char board[ROWS][COLS], Difficulty difficulty);
 int getAIMoveEasy(char board[ROWS][COLS]);
 int getAIMoveMedium(char board[ROWS][COLS]);
+
+void simulateMove(char board[ROWS][COLS], char tempBoard[ROWS][COLS], int col,
+                  char player, int *sim_row);
+bool checkNInRow(char player, char board[ROWS][COLS], int last_row,
+                 int last_col, int target, bool doHighlight);
 
 void setupBoard(char board[ROWS][COLS]);
 void printBoard(char board[ROWS][COLS]);

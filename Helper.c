@@ -54,7 +54,152 @@ int getAIMoveEasy(char board[ROWS][COLS]) {
     return col;
 }
 
-int getAIMoveMedium(char board[ROWS][COLS]) {}
+int getAIMoveMedium(char board[ROWS][COLS]) {
+    char botChar = 'B';
+    char playerChar = 'A';
+    char tempBoard[ROWS][COLS];
+    int sim_row;
+
+    //check if bot can win, if it can it will 
+    for (int col = 1; col <= COLS; col++) {
+        if (checkChoice(col, board)) {
+            simulateMove(board, tempBoard, col, botChar, &sim_row);
+            if (sim_row != -1 &&
+                checkNInRow(botChar, tempBoard, sim_row, col - 1, 4, false)) {
+                return col; 
+            }
+        }
+    }
+
+    // check if player can win, if yes block it
+    for (int col = 1; col <= COLS; col++) {
+        if (checkChoice(col, board)) {
+            simulateMove(board, tempBoard, col, playerChar, &sim_row);
+            if (sim_row != -1 && checkNInRow(playerChar, tempBoard, sim_row,
+                                             col - 1, 4, false)) {
+                return col; 
+            }
+        }
+    }
+
+    // here it tries to make a 3 connected line
+    int setupMoves[COLS];
+    int setupCount = 0;
+    for (int col = 1; col <= COLS; col++) {
+        if (checkChoice(col, board)) {
+            simulateMove(board, tempBoard, col, botChar, &sim_row);
+            if (sim_row != -1 &&
+                checkNInRow(botChar, tempBoard, sim_row, col - 1, 3, false)) {
+                setupMoves[setupCount++] = col;
+            }
+        }
+    }
+    if (setupCount > 0) {
+        return setupMoves[rand() % setupCount];
+    }
+
+    //here it makes the bot play in the center rather than the edges
+    int centerCols[] = {3, 4, 5};
+    int available[3];
+    int count = 0;
+
+    for (int i = 0; i < 3; i++) {
+        int col = centerCols[i]; 
+        if (checkChoice(col, board)) {
+            available[count++] = col;
+        }
+    }
+
+    if (count > 0) {
+        return available[rand() % count];
+    }
+
+    // if everything else fails, we pick a random col
+    for (int col = 1; col <= COLS; col++) {
+        if (checkChoice(col, board)) {
+            return col;
+        }
+    }
+
+    return 4; //it never reaches this
+}
+
+void simulateMove(char board[ROWS][COLS], char tempBoard[ROWS][COLS], int col,
+                  char player, int *sim_row) {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            tempBoard[i][j] = board[i][j];
+        }
+    }
+
+    int colIndex = col - 1;
+    *sim_row = -1;
+    for (int i = ROWS - 1; i >= 0; i--) {
+        if (tempBoard[i][colIndex] == '.') {
+            tempBoard[i][colIndex] = player;
+            *sim_row = i;
+            break;
+        }
+    }
+}
+
+bool checkNInRow(char player, char board[ROWS][COLS], int last_row,
+                 int last_col, int target, bool doHighlight) {
+    int directions[4][2] = {
+        {0, 1}, // horizontal
+        {1, 0}, // vertical
+        {1, 1}, // diagonal
+        {1, -1} // diagonal
+    };
+
+    for (int d = 0; d < 4; d++) {
+        int dr = directions[d][0];
+        int dc = directions[d][1];
+        int count = 1;
+
+        int coords[7][2];
+        int coordCount = 0;
+
+        coords[coordCount][0] = last_row;
+        coords[coordCount][1] = last_col;
+        coordCount++;
+
+        int r = last_row + dr;
+        int c = last_col + dc;
+        while (r >= 0 && r < ROWS && c >= 0 && c < COLS &&
+               board[r][c] == player) {
+            coords[coordCount][0] = r;
+            coords[coordCount][1] = c;
+            coordCount++;
+            count++;
+            r += dr;
+            c += dc;
+        }
+
+        r = last_row - dr;
+        c = last_col - dc;
+        while (r >= 0 && r < ROWS && c >= 0 && c < COLS &&
+               board[r][c] == player) {
+            coords[coordCount][0] = r;
+            coords[coordCount][1] = c;
+            coordCount++;
+            count++;
+            r -= dr;
+            c -= dc;
+        }
+
+        if (count >= target) {
+            if (doHighlight) {
+                for (int k = 0; k < coordCount; k++) {
+                    highlight[coords[k][0]][coords[k][1]] = true;
+                }
+            }
+            return true;
+        }
+    }
+
+    return false;
+}
 
 void setupBoard(char board[ROWS][COLS]) {
     for (int i = 0; i < ROWS; i++) {
@@ -63,6 +208,8 @@ void setupBoard(char board[ROWS][COLS]) {
         }
     }
 }
+
+bool highlight[ROWS][COLS] = {false};
 
 void printBoard(char board[ROWS][COLS]) {
     for (int i = 0; i < ROWS; i++) {
@@ -129,72 +276,6 @@ bool BoardFull(char board[ROWS][COLS]) {
         }
     }
     return true;
-}
-
-bool highlight[ROWS][COLS] = {false};
-
-bool checkWin(char player, char board[ROWS][COLS], int last_row, int last_col) {
-    int r, c;
-    int count;
-
-    // Reset highlights every check
-    for (int i = 0; i < ROWS; i++) {
-        for (int j = 0; j < COLS; j++) {
-            highlight[i][j] = false;
-        }
-    }
-
-    int directions[4][2] = {
-        {0, 1}, // Horizontal
-        {1, 0}, // Vertical
-        {1, 1}, // Diagonal
-        {1, -1} // Diagonal
-    };
-
-    for (int d = 0; d < 4; d++) {
-        int dr = directions[d][0];
-        int dc = directions[d][1];
-        count = 1;
-
-        int coords[7][2];
-        int coordCount = 0;
-
-        coords[coordCount][0] = last_row;
-        coords[coordCount][1] = last_col;
-        coordCount++;
-
-        r = last_row + dr;
-        c = last_col + dc;
-        while (r >= 0 && r < ROWS && c >= 0 && c < COLS &&
-               board[r][c] == player) {
-            coords[coordCount][0] = r;
-            coords[coordCount][1] = c;
-            coordCount++;
-            count++;
-            r += dr;
-            c += dc;
-        }
-
-        r = last_row - dr;
-        c = last_col - dc;
-        while (r >= 0 && r < ROWS && c >= 0 && c < COLS &&
-               board[r][c] == player) {
-            coords[coordCount][0] = r;
-            coords[coordCount][1] = c;
-            coordCount++;
-            count++;
-            r -= dr;
-            c -= dc;
-        }
-
-        if (count >= 4) {
-            for (int k = 0; k < coordCount; k++) {
-                highlight[coords[k][0]][coords[k][1]] = true;
-            }
-            return true;
-        }
-    }
-    return false;
 }
 
 void sleepSeconds(double seconds) {

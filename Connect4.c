@@ -1,6 +1,5 @@
 #include "Connect4.h"
 
-
 void startMenu() {
 
     char Gamemode = '\0';
@@ -90,7 +89,7 @@ void startGamePvP() {
         numMoves++;
 
         if (numMoves >= 7 &&
-            checkWin(player, board, rowPlaced, colChosen - 1)) {
+            checkNInRow(player, board, rowPlaced, colChosen - 1, 4, true)) {
             printBoard(board);
             printf("\nPlayer %c wins!\n", player);
             fflush(stdout);
@@ -164,7 +163,7 @@ void startGameAi(Difficulty difficulty) {
         numMoves++;
 
         if (numMoves >= 7 &&
-            checkWin(player, board, rowPlaced, colChosen - 1)) {
+            checkNInRow(player, board, rowPlaced, colChosen - 1, 4, true)) {
             printBoard(board);
             if (player == 'A') {
                 printf("\nYou win!\n");
