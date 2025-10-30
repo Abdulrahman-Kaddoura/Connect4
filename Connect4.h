@@ -32,6 +32,7 @@ void startGamePvP();
 void startGameAi(Difficulty difficulty);
 int getAIMove(char board[ROWS][COLS], Difficulty difficulty);
 int getAIMoveEasy(char board[ROWS][COLS]);
+int getAIMoveMedium(char board[ROWS][COLS]);
 
 void setupBoard(char board[ROWS][COLS]);
 void printBoard(char board[ROWS][COLS]);

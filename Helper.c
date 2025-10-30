@@ -19,10 +19,10 @@ void selectDifficulty() {
                 sleepSeconds(1.5);
                 startGameAi(EASY);
             } else if (difficulty == 'M') {
-                printf("MEDIUM mode is currently unavailable. Please select "
-                       "(E).\n");
+                printf("Starting game in medium mode...\n\n");
                 sleepSeconds(1.5);
-                // startGameAi(MEDIUM);
+                diff_selected = true;
+                startGameAi(MEDIUM);
             } else if (difficulty == 'H') {
                 printf(
                     "HARD mode is currently unavailable. Please select (E).\n");
@@ -40,9 +40,9 @@ int getAIMove(char board[ROWS][COLS], Difficulty difficulty) {
     if (difficulty == EASY) {
         return getAIMoveEasy(board);
     } else if (difficulty == MEDIUM) {
-        return getAIMoveEasy(board); // change when implementing medium bot
+        return getAIMoveMedium(board);
     } else {
-        return getAIMoveEasy(board); // change when implementing hard bot
+        return getAIMoveMedium(board); // change when implementing hard bot
     }
 }
 
@@ -53,6 +53,8 @@ int getAIMoveEasy(char board[ROWS][COLS]) {
     } while (!checkChoice(col, board));
     return col;
 }
+
+int getAIMoveMedium(char board[ROWS][COLS]) {}
 
 void setupBoard(char board[ROWS][COLS]) {
     for (int i = 0; i < ROWS; i++) {
