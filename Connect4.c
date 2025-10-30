@@ -1,6 +1,5 @@
 #include "Connect4.h"
 
-
 void startMenu() {
 
     char Gamemode = '\0';
@@ -8,7 +7,7 @@ void startMenu() {
     bool chooseMode = false;
 
     while (!chooseMode) {
-        system("clear");
+        clearScreen();
 
         printf("=================================\n");
         printf("    Welcome to Connect 4!\n");
@@ -25,13 +24,13 @@ void startMenu() {
                 chooseMode = true;
                 printf("Starting Player vs Player game...\n");
                 sleepSeconds(1.5);
-                system("clear");
+                clearScreen();
                 startGamePvP();
             } else if (Gamemode == 'A') {
                 chooseMode = true;
                 printf("Starting Player vs AI game...\n");
                 sleepSeconds(1.5);
-                system("clear");
+                clearScreen();
                 selectDifficulty();
             } else {
                 printf("Invalid choice! Please enter P or A,\n");
@@ -90,7 +89,7 @@ void startGamePvP() {
         numMoves++;
 
         if (numMoves >= 7 &&
-            checkWin(player, board, rowPlaced, colChosen - 1)) {
+            checkNInRow(player, board, rowPlaced, colChosen - 1, 4, true)) {
             printBoard(board);
             printf("\nPlayer %c wins!\n", player);
             fflush(stdout);
@@ -151,12 +150,12 @@ void startGameAi(Difficulty difficulty) {
                 valid = checkChoice(colChosen, board);
             }
         } else {
-            printf("AI is thinking\n");
+            printf("\nAI is thinking...\n");
             fflush(stdout);
             sleepSeconds(1.0);
 
             colChosen = getAIMove(board, difficulty);
-            printf("AI chooses column %d\n", colChosen);
+            printf("\nAI chooses column %d\n\n", colChosen);
             fflush(stdout);
         }
 
@@ -164,7 +163,7 @@ void startGameAi(Difficulty difficulty) {
         numMoves++;
 
         if (numMoves >= 7 &&
-            checkWin(player, board, rowPlaced, colChosen - 1)) {
+            checkNInRow(player, board, rowPlaced, colChosen - 1, 4, true)) {
             printBoard(board);
             if (player == 'A') {
                 printf("\nYou win!\n");
@@ -172,11 +171,13 @@ void startGameAi(Difficulty difficulty) {
                 printf("\nAI wins!\n");
             }
             fflush(stdout);
+            sleepSeconds(1.5);
             gameOver = true;
         } else if (BoardFull(board)) {
             printBoard(board);
             printf("\nIt's a draw!\n");
             fflush(stdout);
+            sleepSeconds(1.5);
             gameOver = true;
         } else {
             player = switchPlayer(player);
