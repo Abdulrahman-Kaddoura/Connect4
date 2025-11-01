@@ -27,7 +27,7 @@ void selectDifficulty() {
                 startGameAi(MEDIUM);
             } else if (difficulty == 'H') {
                 printf(
-                    "HARD mode is currently unavailable. Please select (E).\n");
+                    "HARD mode is currently unavailable. Please select (E) or (M).\n");
                 sleepSeconds(1.5);
                 // startGameAi(HARD);
             } else {
