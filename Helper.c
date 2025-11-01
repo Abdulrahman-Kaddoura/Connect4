@@ -17,11 +17,13 @@ void selectDifficulty() {
                 diff_selected = true;
                 printf("Starting game in easy mode...\n\n");
                 sleepSeconds(1.5);
+                clearScreen();
                 startGameAi(EASY);
             } else if (difficulty == 'M') {
                 printf("Starting game in medium mode...\n\n");
                 sleepSeconds(1.5);
                 diff_selected = true;
+                clearScreen();
                 startGameAi(MEDIUM);
             } else if (difficulty == 'H') {
                 printf(
