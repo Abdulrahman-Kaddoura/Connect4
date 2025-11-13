@@ -28,6 +28,7 @@ void startGameAi(Difficulty difficulty);
 int getAIMove(char board[ROWS][COLS], Difficulty difficulty);
 int getAIMoveEasy(char board[ROWS][COLS]);
 int getAIMoveMedium(char board[ROWS][COLS]);
+int getAIMoveHard(char board[ROWS][COLS]);
 
 void simulateMove(char board[ROWS][COLS], char tempBoard[ROWS][COLS], int col,
                   char player, int *sim_row);

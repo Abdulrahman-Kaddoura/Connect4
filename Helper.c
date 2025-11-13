@@ -26,10 +26,11 @@ void selectDifficulty() {
                 clearScreen();
                 startGameAi(MEDIUM);
             } else if (difficulty == 'H') {
-                printf(
-                    "HARD mode is currently unavailable. Please select (E) or (M).\n");
+                diff_selected = true;
+                printf("Starting game in Hard mode...\n\n");
                 sleepSeconds(1.5);
-                // startGameAi(HARD);
+                clearScreen();
+                startGameAi(HARD);
             } else {
                 printf("Invalid input, please enter E, M or H.\n");
                 sleepSeconds(1.5);
@@ -44,7 +45,7 @@ int getAIMove(char board[ROWS][COLS], Difficulty difficulty) {
     } else if (difficulty == MEDIUM) {
         return getAIMoveMedium(board);
     } else {
-        return getAIMoveMedium(board); // change when implementing hard bot
+        return getAIMoveHard(board); 
     }
 }
 
@@ -124,6 +125,27 @@ int getAIMoveMedium(char board[ROWS][COLS]) {
     }
 
     return 4; //it never reaches this
+}
+static void undoMove(int col , char board[ROWS][COLS]){
+    int colINdex = col - 1 ;
+    for (int r = 0 ; r < ROWS; r++){
+        if (board[r][colIndex] != '.') {
+            board[r][colIndex] = '.';
+            return;
+        }
+    }
+}
+static bool hasWinner(char board[ROWS][COLS], char player) {
+    for (int r = 0; r < ROWS; r++) {
+        for (int c = 0; c < COLS; c++) {
+            if (board[r][c] == player) {
+                if (checkNInRow(player, board, r, c, 4, false)) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 void simulateMove(char board[ROWS][COLS], char tempBoard[ROWS][COLS], int col,
