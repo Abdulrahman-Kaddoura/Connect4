@@ -147,6 +147,30 @@ static bool hasWinner(char board[ROWS][COLS], char player) {
     }
     return false;
 }
+static int evaluateBoard(char board[ROWS][COLS], char aiPlayer, char humanPlayer){
+    if(hasWinner(board, aiPlayer)) return 100000;
+    if(hasWinner(board, humanPlayer)) return -100000;
+    if(BoardFull(boardf)) return 0; 
+
+    int score = 0 ;
+    int centerColIndex = COLS / 2;
+    for(int r = 0 ; r < ROWS ; r++){
+        if(board[r][centerColIndex] == aiPlayer) score +=5 ; 
+        else if(board[r][centerColIndex] == humanPlayer) score -=5 ; 
+    }
+    for(int r = 0 ; r < ROWS ; r++){
+        for(int c = 0 ; c < COLS ; c++){
+            if(board[r][c] == aiPlayer){
+                if(checkNInRow(aiPlayer, board, r, c, 3, false)) score += 20 ; 
+                if(checkNInRow(aiPlayer, board, r, c, 2, false)) score += 5 ; 
+            }else if(board[r][c] == humanPlayer){
+                if(checkNInRow(humanPlayer, board, r, c, 3, false)) score -= 25 ; 
+                if(checkNInRow(humanPlayer, board, r, c, 2, false)) score -= 7 ;
+            }
+        }
+    }
+    return score ;
+}
 
 void simulateMove(char board[ROWS][COLS], char tempBoard[ROWS][COLS], int col,
                   char player, int *sim_row) {
