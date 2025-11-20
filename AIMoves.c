@@ -119,6 +119,11 @@ int getAIMoveMedium(char board[ROWS][COLS]) {
 // everything used for hard move here
 //-------------------------------------------------
 
+static const int SCORE_3_OPEN = 2000;
+static const int SCORE_3_BLOCKED = 1500;
+static const int SCORE_2_OPEN = 200;
+static const int SCORE_CENTER = 50;
+
 static void undoMove(int col, char board[ROWS][COLS]) {
     int colIndex = col - 1;
     for (int r = 0; r < ROWS; r++) {
@@ -142,81 +147,203 @@ bool hasWinner(char board[ROWS][COLS], char player) {
     return false;
 }
 
-static int evaluateBoard(char board[ROWS][COLS], char aiPlayer,
-                         char humanPlayer) {
-    if (hasWinner(board, aiPlayer))
-        return 100000;
-    if (hasWinner(board, humanPlayer))
-        return -100000;
-    if (BoardFull(board))
-        return 0;
-
-    int score = 0;
-    int centerColIndex = COLS / 2;
-    for (int r = 0; r < ROWS; r++) {
-        if (board[r][centerColIndex] == aiPlayer)
-            score += 5;
-        else if (board[r][centerColIndex] == humanPlayer)
-            score -= 5;
-    }
-    for (int r = 0; r < ROWS; r++) {
-        for (int c = 0; c < COLS; c++) {
-            if (board[r][c] == aiPlayer) {
-                if (checkNInRow(aiPlayer, board, r, c, 3, false))
-                    score += 20;
-                if (checkNInRow(aiPlayer, board, r, c, 2, false))
-                    score += 5;
-            } else if (board[r][c] == humanPlayer) {
-                if (checkNInRow(humanPlayer, board, r, c, 3, false))
-                    score -= 25;
-                if (checkNInRow(humanPlayer, board, r, c, 2, false))
-                    score -= 7;
-            }
+static int evaluateWindow(char window[4], char playerChar, char oppChar) {
+    int playerCount = 0, oppCount = 0, emptyCount = 0;
+    for (int i = 0; i < 4; i++) {
+        if (window[i] == playerChar) {
+            playerCount++;
+        } else if (window[i] == oppChar) {
+            oppCount++;
+        } else {
+            emptyCount++;
         }
     }
+
+    if (playerCount == 4) {
+        return WIN_SCORE;
+    }
+    if (oppCount == 4) {
+        return LOSS_SCORE;
+    }
+
+    if (playerCount == 3 && emptyCount == 1) {
+        return SCORE_3_OPEN;
+    }
+    if (playerCount == 2 && emptyCount == 2) {
+        return SCORE_2_OPEN;
+    }
+    if (oppCount == 3 && emptyCount == 1) {
+        return -SCORE_3_BLOCKED;
+    }
+    if (oppCount == 2 && emptyCount == 2) {
+        return -SCORE_2_OPEN;
+    }
+
+    return 0;
+}
+
+static int evaluateBoardStrong(char board[ROWS][COLS], char playerChar) {
+    char oppChar;
+    if (playerChar == 'A') {
+        oppChar = 'B';
+    } else {
+        oppChar = 'A';
+    }
+
+    int score = 0;
+
+    int center = COLS / 2;
+    for (int r = 0; r < ROWS; r++) {
+        if (board[r][center] == playerChar) {
+            score += SCORE_CENTER;
+        } else if (board[r][center] == oppChar) {
+            score -= SCORE_CENTER;
+        }
+    }
+
+    char window[4];
+    for (int r = 0; r < ROWS; r++) {
+        for (int c = 0; c <= COLS - 4; c++) {
+            for (int i = 0; i < 4; i++) {
+                window[i] = board[r][c + i];
+            }
+            score += evaluateWindow(window, playerChar, oppChar);
+        }
+    }
+
+    for (int c = 0; c < COLS; c++) {
+        for (int r = 0; r <= ROWS - 4; r++) {
+            for (int i = 0; i < 4; i++) {
+                window[i] = board[r + i][c];
+            }
+            score += evaluateWindow(window, playerChar, oppChar);
+        }
+    }
+
+    for (int r = 0; r <= ROWS - 4; r++) {
+        for (int c = 0; c <= COLS - 4; c++) {
+            for (int i = 0; i < 4; i++) {
+                window[i] = board[r + i][c + i];
+            }
+            score += evaluateWindow(window, playerChar, oppChar);
+        }
+    }
+
+    for (int r = 3; r < ROWS; r++) {
+        for (int c = 0; c <= COLS - 4; c++) {
+            for (int i = 0; i < 4; i++) {
+                window[i] = board[r - i][c + i];
+            }
+            score += evaluateWindow(window, playerChar, oppChar);
+        }
+    }
+
     return score;
 }
 
-static int negamax(char board[ROWS][COLS], int depth, int alpha, int beta, char player, char opponent) {
-    if (hasWinner(board, opponent))  // opponent just played
-        return -100000;  // losing position
-    if (BoardFull(board) || depth == 0)
-        return evaluateBoard(board, player, opponent);
+static void generateMoveOrder(int moves[], int *count) {
+    int order[COLS] = {4, 3, 5, 2, 6, 1, 7};
+    *count = 0;
+    for (int i = 0; i < COLS; i++) {
+        moves[(*count)++] = order[i];
+    }
+}
 
-    int maxScore = -1000000;
-    for (int col = 1; col <= COLS; col++) {
-        if (!checkChoice(col, board))
+static int negamax_strong(char board[ROWS][COLS], int depth, int alpha,
+                          int beta, char player, char opponent) {
+    if (hasWinner(board, opponent)) {
+        return LOSS_SCORE;
+    }
+
+    if (BoardFull(board) || depth == 0) {
+        return evaluateBoardStrong(board, player);
+    }
+
+    int best = -INF;
+    int moves[COLS];
+    int mcount;
+    generateMoveOrder(moves, &mcount);
+
+    for (int mi = 0; mi < mcount; mi++) {
+        int col = moves[mi];
+        if (!checkChoice(col, board)) {
             continue;
+        }
 
         makeMove(col, player, board);
-        int score = -negamax(board, depth - 1, -beta, -alpha, opponent, player);
+
+        if (hasWinner(board, player)) {
+            undoMove(col, board);
+            return WIN_SCORE - ((8 - depth));
+        }
+
+        int val =
+            -negamax_strong(board, depth - 1, -beta, -alpha, opponent, player);
+
         undoMove(col, board);
 
-        if (score > maxScore)
-            maxScore = score;
-
-        if (score > alpha)
-            alpha = score;
-
-        if (alpha >= beta)
-            break;  // alpha-beta pruning
+        if (val > best) {
+            best = val;
+        }
+        if (val > alpha) {
+            alpha = val;
+        }
+        if (alpha >= beta) {
+            break;
+        }
     }
-    return maxScore;
+
+    return best;
 }
 
 int getAIMoveHard(char board[ROWS][COLS]) {
-    int bestMove = 1;
-    int bestScore = -1000000;
     char bot = 'B';
     char human = 'A';
-    int depth = 6; // tune for performance vs intelligence
+    int bestMove = 4;
+    int bestScore = -INF;
 
-    for (int col = 1; col <= COLS; col++) {
-        if (!checkChoice(col, board))
+    // win if possible
+    for (int col = 1; col <= COLS; ++col) {
+        if (!checkChoice(col, board)) {
             continue;
+        }
+        makeMove(col, bot, board);
+        if (hasWinner(board, bot)) {
+            undoMove(col, board);
+            return col;
+        }
+        undoMove(col, board);
+    }
+
+    // block opponent immediate wins
+    for (int col = 1; col <= COLS; ++col) {
+        if (!checkChoice(col, board)) {
+            continue;
+        }
+        makeMove(col, human, board);
+        if (hasWinner(board, human)) {
+            undoMove(col, board);
+            return col;
+        }
+        undoMove(col, board);
+    }
+
+    int searchDepth = 7;
+
+    int moves[COLS];
+    int mcount;
+    generateMoveOrder(moves, &mcount);
+    for (int mi = 0; mi < mcount; ++mi) {
+        int col = moves[mi];
+        if (!checkChoice(col, board)) {
+            continue;
+        }
 
         makeMove(col, bot, board);
-        int score = -negamax(board, depth - 1, -1000000, 1000000, human, bot);
+
+        int score =
+            -negamax_strong(board, searchDepth - 1, -INF, INF, human, bot);
+
         undoMove(col, board);
 
         if (score > bestScore) {

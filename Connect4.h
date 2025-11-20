@@ -7,9 +7,14 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <limits.h>
 
 #define ROWS 6
 #define COLS 7
+
+#define INF 1000000
+#define WIN_SCORE 100000
+#define LOSS_SCORE -100000
 
 #define COLOR_RESET "\033[0m"
 #define COLOR_RED "\033[31m"
