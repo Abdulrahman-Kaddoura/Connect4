@@ -3,9 +3,10 @@
 #ifdef TEST_BOTS
 int main() {
 
+    srand((unsigned)time(NULL));
     char board[ROWS][COLS];
     int winsA = 0, winsB = 0, draws = 0;
-    int games = 100;
+    int games = 200;
 
     for (int g = 0; g < games; g++) {
         setupBoard(board);
