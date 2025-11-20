@@ -39,166 +39,53 @@ void selectDifficulty() {
     }
 }
 
-int getAIMove(char board[ROWS][COLS], Difficulty difficulty) {
-    if (difficulty == EASY) {
-        return getAIMoveEasy(board);
-    } else if (difficulty == MEDIUM) {
-        return getAIMoveMedium(board);
-    } else {
-        return getAIMoveHard(board);
-    }
-}
-
-int getAIMoveEasy(char board[ROWS][COLS]) {
-    int col;
-    do {
-        col = (rand() % COLS) + 1;
-    } while (!checkChoice(col, board));
-    return col;
-}
-
-int getAIMoveMedium(char board[ROWS][COLS]) {
-    char botChar = 'B';
-    char playerChar = 'A';
-    char tempBoard[ROWS][COLS];
-    int sim_row;
-
-    // check if bot can win, if it can it will
-    for (int col = 1; col <= COLS; col++) {
-        if (checkChoice(col, board)) {
-            simulateMove(board, tempBoard, col, botChar, &sim_row);
-            if (sim_row != -1 &&
-                checkNInRow(botChar, tempBoard, sim_row, col - 1, 4, false)) {
-                return col;
-            }
-        }
-    }
-
-    // check if player can win, if yes block it
-    for (int col = 1; col <= COLS; col++) {
-        if (checkChoice(col, board)) {
-            simulateMove(board, tempBoard, col, playerChar, &sim_row);
-            if (sim_row != -1 && checkNInRow(playerChar, tempBoard, sim_row,
-                                             col - 1, 4, false)) {
-                return col;
-            }
-        }
-    }
-
-    // here it tries to make a 3 connected line
-    int setupMoves[COLS];
-    int setupCount = 0;
-    for (int col = 1; col <= COLS; col++) {
-        if (checkChoice(col, board)) {
-            simulateMove(board, tempBoard, col, botChar, &sim_row);
-            if (sim_row != -1 &&
-                checkNInRow(botChar, tempBoard, sim_row, col - 1, 3, false)) {
-                setupMoves[setupCount++] = col;
-            }
-        }
-    }
-    if (setupCount > 0) {
-        return setupMoves[rand() % setupCount];
-    }
-
-    // here it makes the bot play in the center rather than the edges
-    int centerCols[] = {3, 4, 5};
-    int available[3];
-    int count = 0;
-
-    for (int i = 0; i < 3; i++) {
-        int col = centerCols[i];
-        if (checkChoice(col, board)) {
-            available[count++] = col;
-        }
-    }
-
-    if (count > 0) {
-        return available[rand() % count];
-    }
-
-    // if everything else fails, we pick a random col
-    for (int col = 1; col <= COLS; col++) {
-        if (checkChoice(col, board)) {
-            return col;
-        }
-    }
-
-    return 4; // it never reaches this
-}
-static void undoMove(int col, char board[ROWS][COLS]) {
-    int colIndex = col - 1;
-    for (int r = 0; r < ROWS; r++) {
-        if (board[r][colIndex] != '.') {
-            board[r][colIndex] = '.';
-            return;
-        }
-    }
-}
-static bool hasWinner(char board[ROWS][COLS], char player) {
-    for (int r = 0; r < ROWS; r++) {
-        for (int c = 0; c < COLS; c++) {
-            if (board[r][c] == player) {
-                if (checkNInRow(player, board, r, c, 4, false)) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-static int evaluateBoard(char board[ROWS][COLS], char aiPlayer,
-                         char humanPlayer) {
-    if (hasWinner(board, aiPlayer))
-        return 100000;
-    if (hasWinner(board, humanPlayer))
-        return -100000;
-    if (BoardFull(board))
-        return 0;
-
-    int score = 0;
-    int centerColIndex = COLS / 2;
-    for (int r = 0; r < ROWS; r++) {
-        if (board[r][centerColIndex] == aiPlayer)
-            score += 5;
-        else if (board[r][centerColIndex] == humanPlayer)
-            score -= 5;
-    }
-    for (int r = 0; r < ROWS; r++) {
-        for (int c = 0; c < COLS; c++) {
-            if (board[r][c] == aiPlayer) {
-                if (checkNInRow(aiPlayer, board, r, c, 3, false))
-                    score += 20;
-                if (checkNInRow(aiPlayer, board, r, c, 2, false))
-                    score += 5;
-            } else if (board[r][c] == humanPlayer) {
-                if (checkNInRow(humanPlayer, board, r, c, 3, false))
-                    score -= 25;
-                if (checkNInRow(humanPlayer, board, r, c, 2, false))
-                    score -= 7;
-            }
-        }
-    }
-    return score;
-}
-
-void simulateMove(char board[ROWS][COLS], char tempBoard[ROWS][COLS], int col,
-                  char player, int *sim_row) {
+void setupBoard(char board[ROWS][COLS]) {
     for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLS; j++) {
-            tempBoard[i][j] = board[i][j];
+            board[i][j] = '.';
         }
+    }
+}
+
+static bool highlight[ROWS][COLS] = {false};
+
+void printBoard(char board[ROWS][COLS]) {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            char piece = board[i][j];
+            if (highlight[i][j]) {
+                if (piece == 'A') {
+                    printf(COLOR_RED "%c " COLOR_RESET, piece);
+                } else if (piece == 'B') {
+                    printf(COLOR_YELLOW "%c " COLOR_RESET, piece);
+                }
+            } else {
+                printf("%c ", piece);
+            }
+        }
+        printf("\n");
     }
 
-    int colIndex = col - 1;
-    *sim_row = -1;
-    for (int i = ROWS - 1; i >= 0; i--) {
-        if (tempBoard[i][colIndex] == '.') {
-            tempBoard[i][colIndex] = player;
-            *sim_row = i;
-            break;
-        }
+    for (int i = 1; i <= COLS; i++) {
+        printf("%d ", i);
     }
+    printf("\n");
+
+    fflush(stdout);
+}
+
+bool checkChoice(int col, char board[ROWS][COLS]) {
+    int columnIndex = col - 1;
+
+    if (columnIndex < 0 || columnIndex >= COLS) {
+        return false;
+    }
+
+    if (board[0][columnIndex] != '.') {
+        return false;
+    }
+
+    return true;
 }
 
 bool checkNInRow(char player, char board[ROWS][COLS], int last_row,
@@ -257,55 +144,6 @@ bool checkNInRow(char player, char board[ROWS][COLS], int last_row,
     }
 
     return false;
-}
-
-void setupBoard(char board[ROWS][COLS]) {
-    for (int i = 0; i < ROWS; i++) {
-        for (int j = 0; j < COLS; j++) {
-            board[i][j] = '.';
-        }
-    }
-}
-
-bool highlight[ROWS][COLS] = {false};
-
-void printBoard(char board[ROWS][COLS]) {
-    for (int i = 0; i < ROWS; i++) {
-        for (int j = 0; j < COLS; j++) {
-            char piece = board[i][j];
-            if (highlight[i][j]) {
-                if (piece == 'A') {
-                    printf(COLOR_RED "%c " COLOR_RESET, piece);
-                } else if (piece == 'B') {
-                    printf(COLOR_YELLOW "%c " COLOR_RESET, piece);
-                }
-            } else {
-                printf("%c ", piece);
-            }
-        }
-        printf("\n");
-    }
-
-    for (int i = 1; i <= COLS; i++) {
-        printf("%d ", i);
-    }
-    printf("\n");
-
-    fflush(stdout);
-}
-
-bool checkChoice(int col, char board[ROWS][COLS]) {
-    int columnIndex = col - 1;
-
-    if (columnIndex < 0 || columnIndex >= COLS) {
-        return false;
-    }
-
-    if (board[0][columnIndex] != '.') {
-        return false;
-    }
-
-    return true;
 }
 
 int makeMove(int col, char player, char board[ROWS][COLS]) {
