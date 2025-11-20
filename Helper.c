@@ -45,7 +45,7 @@ int getAIMove(char board[ROWS][COLS], Difficulty difficulty) {
     } else if (difficulty == MEDIUM) {
         return getAIMoveMedium(board);
     } else {
-        return getAIMoveHard(board); 
+        return getAIMoveHard(board);
     }
 }
 
@@ -63,13 +63,13 @@ int getAIMoveMedium(char board[ROWS][COLS]) {
     char tempBoard[ROWS][COLS];
     int sim_row;
 
-    //check if bot can win, if it can it will 
+    // check if bot can win, if it can it will
     for (int col = 1; col <= COLS; col++) {
         if (checkChoice(col, board)) {
             simulateMove(board, tempBoard, col, botChar, &sim_row);
             if (sim_row != -1 &&
                 checkNInRow(botChar, tempBoard, sim_row, col - 1, 4, false)) {
-                return col; 
+                return col;
             }
         }
     }
@@ -80,7 +80,7 @@ int getAIMoveMedium(char board[ROWS][COLS]) {
             simulateMove(board, tempBoard, col, playerChar, &sim_row);
             if (sim_row != -1 && checkNInRow(playerChar, tempBoard, sim_row,
                                              col - 1, 4, false)) {
-                return col; 
+                return col;
             }
         }
     }
@@ -101,13 +101,13 @@ int getAIMoveMedium(char board[ROWS][COLS]) {
         return setupMoves[rand() % setupCount];
     }
 
-    //here it makes the bot play in the center rather than the edges
+    // here it makes the bot play in the center rather than the edges
     int centerCols[] = {3, 4, 5};
     int available[3];
     int count = 0;
 
     for (int i = 0; i < 3; i++) {
-        int col = centerCols[i]; 
+        int col = centerCols[i];
         if (checkChoice(col, board)) {
             available[count++] = col;
         }
@@ -124,11 +124,11 @@ int getAIMoveMedium(char board[ROWS][COLS]) {
         }
     }
 
-    return 4; //it never reaches this
+    return 4; // it never reaches this
 }
-static void undoMove(int col , char board[ROWS][COLS]){
-    int colINdex = col - 1 ;
-    for (int r = 0 ; r < ROWS; r++){
+static void undoMove(int col, char board[ROWS][COLS]) {
+    int colIndex = col - 1;
+    for (int r = 0; r < ROWS; r++) {
         if (board[r][colIndex] != '.') {
             board[r][colIndex] = '.';
             return;
@@ -147,29 +147,39 @@ static bool hasWinner(char board[ROWS][COLS], char player) {
     }
     return false;
 }
-static int evaluateBoard(char board[ROWS][COLS], char aiPlayer, char humanPlayer){
-    if(hasWinner(board, aiPlayer)) return 100000;
-    if(hasWinner(board, humanPlayer)) return -100000;
-    if(BoardFull(boardf)) return 0; 
+static int evaluateBoard(char board[ROWS][COLS], char aiPlayer,
+                         char humanPlayer) {
+    if (hasWinner(board, aiPlayer))
+        return 100000;
+    if (hasWinner(board, humanPlayer))
+        return -100000;
+    if (BoardFull(board))
+        return 0;
 
-    int score = 0 ;
+    int score = 0;
     int centerColIndex = COLS / 2;
-    for(int r = 0 ; r < ROWS ; r++){
-        if(board[r][centerColIndex] == aiPlayer) score +=5 ; 
-        else if(board[r][centerColIndex] == humanPlayer) score -=5 ; 
+    for (int r = 0; r < ROWS; r++) {
+        if (board[r][centerColIndex] == aiPlayer)
+            score += 5;
+        else if (board[r][centerColIndex] == humanPlayer)
+            score -= 5;
     }
-    for(int r = 0 ; r < ROWS ; r++){
-        for(int c = 0 ; c < COLS ; c++){
-            if(board[r][c] == aiPlayer){
-                if(checkNInRow(aiPlayer, board, r, c, 3, false)) score += 20 ; 
-                if(checkNInRow(aiPlayer, board, r, c, 2, false)) score += 5 ; 
-            }else if(board[r][c] == humanPlayer){
-                if(checkNInRow(humanPlayer, board, r, c, 3, false)) score -= 25 ; 
-                if(checkNInRow(humanPlayer, board, r, c, 2, false)) score -= 7 ;
+    for (int r = 0; r < ROWS; r++) {
+        for (int c = 0; c < COLS; c++) {
+            if (board[r][c] == aiPlayer) {
+                if (checkNInRow(aiPlayer, board, r, c, 3, false))
+                    score += 20;
+                if (checkNInRow(aiPlayer, board, r, c, 2, false))
+                    score += 5;
+            } else if (board[r][c] == humanPlayer) {
+                if (checkNInRow(humanPlayer, board, r, c, 3, false))
+                    score -= 25;
+                if (checkNInRow(humanPlayer, board, r, c, 2, false))
+                    score -= 7;
             }
         }
     }
-    return score ;
+    return score;
 }
 
 void simulateMove(char board[ROWS][COLS], char tempBoard[ROWS][COLS], int col,
