@@ -5,7 +5,7 @@ clear
 cd /root/Connect4 || exit 1
 
 # Compile the source code every time
-gcc -Wall -Werror -g Connect4.c main.c Helper.c -o connect4
+gcc -Wall -Werror -g Connect4.c main.c Helper.c AIMoves.c -o connect4
 
 # Check if compilation succeeded
 if [ $? -eq 0 ]; then
