@@ -1,6 +1,6 @@
 # Name of the executable
-TARGET = connect
-TEST_TARGET = test
+TARGET = connect4
+TEST_TARGET = testBots
 
 # Compiler
 CC = gcc
