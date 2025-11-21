@@ -46,6 +46,9 @@ void selectDifficulty();
 void startGamePvP();
 void startGameAi(Difficulty difficulty);
 
+void startNetworkServer();
+void startNetworkClient(char* server_ip);
+
 int getAIMove(char board[ROWS][COLS], Difficulty difficulty);
 int getAIMoveEasy(char board[ROWS][COLS]);
 int getAIMoveMedium(char board[ROWS][COLS]);

@@ -14,15 +14,15 @@ void startMenu() {
         printf("=================================\n\n");
         printf("Get 4 pieces in a row to win!\n\n");
 
-        printf("Select mode:\nPlayer vs Player (P) or Player vs AI (A): ");
+        printf("Select mode:\nLocal Player vs Player (L) - Player vs AI (A) - Network: As server (S) - Network: As client (C): ");
         fflush(stdout);
 
         if (fgets(input, sizeof(input), stdin)) {
             Gamemode = toupper(input[0]);
 
-            if (Gamemode == 'P') {
+            if (Gamemode == 'L') {
                 chooseMode = true;
-                printf("Starting Player vs Player game...\n");
+                printf("Starting Local Player vs Player game...\n");
                 sleepSeconds(1.5);
                 clearScreen();
                 startGamePvP();
@@ -32,7 +32,27 @@ void startMenu() {
                 sleepSeconds(1.5);
                 clearScreen();
                 selectDifficulty();
-            } else {
+            } else if (Gamemode == 'S') {
+                chooseMode = true;
+                printf("Starting Network Server (you are Player A)...\n");
+                sleepSeconds(1.0);
+                clearScreen();
+                startNetworkServer();
+            } 
+            else if (Gamemode == 'C') {
+                chooseMode = true;
+                char ipbuf[64];
+
+                printf("Enter server IP (e.g. 192.168.1.10): ");
+                fflush(stdout);
+
+                if (fgets(ipbuf, sizeof(ipbuf), stdin)) {
+                    // REMOVE NEWLINE GOES HERE
+                    startNetworkClient(ipbuf);
+                }
+            }
+
+             else {
                 printf("Invalid choice! Please enter P or A,\n");
                 sleepSeconds(1);
             }
