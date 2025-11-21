@@ -181,17 +181,18 @@ void sleepSeconds(double seconds) {
     nanosleep(&ts, NULL);
 }
 
-void copyBoard(char dest[ROWS][COLS], char src[ROWS][COLS]){
-    for(int i =0; i< ROWS; i++){
-        for(int j =0; j < COLS; j++){
+void copyBoard(char dest[ROWS][COLS], char src[ROWS][COLS]) {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
             dest[i][j] = src[i][j];
         }
     }
 }
 
-void flushInput(){
+void flushInput() {
     int c;
-    while((c = getchar()) != '\n' && c != EOF);
+    while ((c = getchar()) != '\n' && c != EOF)
+        ;
 }
 
 void clearScreen() { printf("\033[H\033[J"); }

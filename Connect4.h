@@ -2,14 +2,13 @@
 #define CONNECT4_H
 
 #include <ctype.h>
+#include <limits.h>
+#include <pthread.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-#include <limits.h>
-#include <pthread.h>
-
 
 #define ROWS 6
 #define COLS 7
@@ -35,7 +34,7 @@ typedef struct {
 
 void copyBoard(char dest[ROWS][COLS], char src[ROWS][COLS]);
 int getAIMoveHard_MT(char board[ROWS][COLS]);
-void* evaluateMoveThread(void* arg);
+void *evaluateMoveThread(void *arg);
 
 void sleepSeconds(double seconds);
 void clearScreen();
@@ -48,7 +47,7 @@ void startGamePvP();
 void startGameAi(Difficulty difficulty);
 
 void startNetworkServer();
-void startNetworkClient(char* server_ip);
+void startNetworkClient(char *server_ip);
 
 int getAIMove(char board[ROWS][COLS], Difficulty difficulty);
 int getAIMoveEasy(char board[ROWS][COLS]);
@@ -69,7 +68,5 @@ bool BoardFull(char board[ROWS][COLS]);
 
 bool checkNInRow(char player, char board[ROWS][COLS], int last_row,
                  int last_col, int target, bool doHighlight);
-
-
 
 #endif

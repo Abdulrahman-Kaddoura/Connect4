@@ -10,7 +10,7 @@ CFLAGS = -Wall -Werror -g
 LDFLAGS = -lpthread
 
 # Source files
-SRCS = Connect4.c main.c Helper.c AIMoves.c connect4_server.c connect4_client.c
+SRCS = Connect4.c main.c Helper.c AIMoves.c Connect4_server.c Connect4_client.c
 
 # Default target
 all: $(TARGET)
