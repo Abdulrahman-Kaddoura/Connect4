@@ -23,7 +23,7 @@ void startNetworkServer() {
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(PORT);
 
-    if (bind(server_fd, (struct sockaddr*)&address, sizeof(address)) < 0) {
+    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
         perror("bind");
         close(server_fd);
         return;
@@ -35,7 +35,7 @@ void startNetworkServer() {
         return;
     }
 
-    client_fd = accept(server_fd, (struct sockaddr*)&address, &addrlen);
+    client_fd = accept(server_fd, (struct sockaddr *)&address, &addrlen);
     if (client_fd < 0) {
         perror("accept");
         close(server_fd);
@@ -49,21 +49,21 @@ void startNetworkServer() {
     char player = 'A';
     int numMoves = 0;
 
-    while(true){
+    while (true) {
         printBoard(board);
 
-        if(player == 'A'){
+        if (player == 'A') {
 
             int col;
             int valid_input = 0;
 
             flushInput();
 
-            while(!valid_input){
+            while (!valid_input) {
                 printf("Your move (1-7): ");
                 fflush(stdout);
 
-                if(scanf("%d", &col) != 1){
+                if (scanf("%d", &col) != 1) {
                     flushInput();
                     printf("Invalid input! Please enter a number.\n");
                     continue;
@@ -71,9 +71,9 @@ void startNetworkServer() {
 
                 flushInput();
 
-                if(!checkChoice(col, board)){
+                if (!checkChoice(col, board)) {
                     printf("Invalid column, try again: ");
-                } else{
+                } else {
                     valid_input = 1;
                 }
             }
@@ -84,13 +84,13 @@ void startNetworkServer() {
             char msg[16];
             snprintf(msg, sizeof(msg), "%d\n", col);
             write(client_fd, msg, strlen(msg));
-            
+
         } else {
 
             printf("Waiting for opponent...\n");
 
             char buffer[16];
-            int bytes = read(client_fd, buffer, sizeof(buffer)-1);
+            int bytes = read(client_fd, buffer, sizeof(buffer) - 1);
             if (bytes <= 0) {
                 printf("Client disconnected or read error.\n");
                 break;
@@ -103,12 +103,12 @@ void startNetworkServer() {
             numMoves++;
         }
 
-        if(hasWinner(board, player)){
+        if (hasWinner(board, player)) {
             printBoard(board);
             printf("\nPlayer %c wins!\n", player);
             break;
         }
-        if(BoardFull(board)){
+        if (BoardFull(board)) {
             printBoard(board);
             printf("It's a draw!\n");
             break;
@@ -118,5 +118,4 @@ void startNetworkServer() {
 
     close(client_fd);
     close(server_fd);
-
 }

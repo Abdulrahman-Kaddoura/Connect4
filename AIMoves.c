@@ -355,52 +355,50 @@ int getAIMoveHard_sequential(char board[ROWS][COLS]) {
     return bestMove;
 }
 
-int getAIMoveHard(char board[ROWS][COLS]){
-    return getAIMoveHard_MT(board);
-}
+int getAIMoveHard(char board[ROWS][COLS]) { return getAIMoveHard_MT(board); }
 
+void *evaluateMoveThread(void *arg) {
+    ThreadData *data = (ThreadData *)arg;
 
-void* evaluateMoveThread(void* arg){
-    ThreadData* data = (ThreadData*)arg;
-    
     char threadBoard[ROWS][COLS];
     copyBoard(threadBoard, data->board);
-    
+
     makeMove(data->col, data->bot, threadBoard);
-    
-    int score = -negamax_strong(threadBoard, data->searchDepth - 1, -INF, INF, data->human, data->bot);
+
+    int score = -negamax_strong(threadBoard, data->searchDepth - 1, -INF, INF,
+                                data->human, data->bot);
     data->score = score;
-    
+
     return NULL;
 }
 
-int getAIMoveHard_MT(char board[ROWS][COLS]){
+int getAIMoveHard_MT(char board[ROWS][COLS]) {
     char bot = 'B';
     char human = 'A';
     int bestMove = 4;
     int bestScore = -INF;
 
     // this is to check for immediate wins
-    for(int col = 1; col <=COLS; ++col){
-        if(!checkChoice(col,board)){
+    for (int col = 1; col <= COLS; ++col) {
+        if (!checkChoice(col, board)) {
             continue;
         }
         makeMove(col, bot, board);
-        if(hasWinner(board, bot)){
-            undoMove(col,board);
+        if (hasWinner(board, bot)) {
+            undoMove(col, board);
             printf("DEBUG: Found immediate win in column %d\n", col);
             return col;
         }
-        undoMove(col,board);
+        undoMove(col, board);
     }
 
-    //this is to block the opponents immediate wins
-    for(int col = 1; col <=COLS; ++col){
-        if(!checkChoice(col, board)){
+    // this is to block the opponents immediate wins
+    for (int col = 1; col <= COLS; ++col) {
+        if (!checkChoice(col, board)) {
             continue;
         }
         makeMove(col, human, board);
-        if(hasWinner(board, human)){
+        if (hasWinner(board, human)) {
             undoMove(col, board);
             // printf("DEBUG: Blocking opponent win in column %d\n", col);
             return col;
@@ -408,25 +406,23 @@ int getAIMoveHard_MT(char board[ROWS][COLS]){
         undoMove(col, board);
     }
 
-
-
-
     // this is the parallel evaluation of all possible moves
     pthread_t threads[COLS];
     ThreadData threadData[COLS];
     int activeThreads = 0;
     int searchDepth = 7;
 
-    //here, we create threads for each valid move
+    // here, we create threads for each valid move
     int moves[COLS];
     int mcount;
     generateMoveOrder(moves, &mcount);
 
-    // printf("DEBUG: Starting parallel evaluation for up to %d possible moves...\n", mcount);
+    // printf("DEBUG: Starting parallel evaluation for up to %d possible
+    // moves...\n", mcount);
 
-    for(int mi = 0; mi < mcount; ++mi){
+    for (int mi = 0; mi < mcount; ++mi) {
         int col = moves[mi];
-        if(!checkChoice(col, board)){
+        if (!checkChoice(col, board)) {
             continue;
         }
 
@@ -438,8 +434,9 @@ int getAIMoveHard_MT(char board[ROWS][COLS]){
         threadData[activeThreads].score = -INF;
 
         // create thread
-        if(pthread_create(&threads[activeThreads], NULL, evaluateMoveThread, &threadData[activeThreads]) == 0){
-            // printf("DEBUG: Created thread for column %d\n", col); 
+        if (pthread_create(&threads[activeThreads], NULL, evaluateMoveThread,
+                           &threadData[activeThreads]) == 0) {
+            // printf("DEBUG: Created thread for column %d\n", col);
             activeThreads++;
         }
     }
@@ -447,20 +444,21 @@ int getAIMoveHard_MT(char board[ROWS][COLS]){
     // printf("DEBUG: Created %d threads for valid moves.\n", activeThreads);
     // printf("DEBUG: Waiting for %d threads to complete...\n", activeThreads);
 
-
-    for(int i =0; i < activeThreads; i++){
+    for (int i = 0; i < activeThreads; i++) {
         pthread_join(threads[i], NULL);
 
-        // printf("DEBUG: Thread %d (col %d) returned score: %d\n", i, threadData[i].col, threadData[i].score);
+        // printf("DEBUG: Thread %d (col %d) returned score: %d\n", i,
+        // threadData[i].col, threadData[i].score);
 
-        if(threadData[i].score > bestScore){
+        if (threadData[i].score > bestScore) {
             bestScore = threadData[i].score;
             bestMove = threadData[i].col;
         }
     }
-    // printf("DEBUG: Best move: column %d with score %d\n", bestMove, bestScore);
+    // printf("DEBUG: Best move: column %d with score %d\n", bestMove,
+    // bestScore);
 
-    if(activeThreads == 0){
+    if (activeThreads == 0) {
 
         // printf("DEBUG: Threading failed, using sequential fallback\n");
         return getAIMoveHard_sequential(board);

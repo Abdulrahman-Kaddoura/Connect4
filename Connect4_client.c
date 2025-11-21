@@ -5,7 +5,7 @@
 
 #define PORT 4444
 
-void startNetworkClient(char* server_ip) {
+void startNetworkClient(char *server_ip) {
 
     int sockfd;
     struct sockaddr_in serv_addr;
@@ -18,7 +18,7 @@ void startNetworkClient(char* server_ip) {
     serv_addr.sin_port = htons(PORT);
     inet_pton(AF_INET, server_ip, &serv_addr.sin_addr);
 
-    connect(sockfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
+    connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
 
     printf("Connected to server.\n");
 
@@ -36,8 +36,9 @@ void startNetworkClient(char* server_ip) {
             printf("Waiting for opponent...\n");
 
             char buffer[16];
-            int bytes = read(sockfd, buffer, sizeof(buffer)-1);
-            if (bytes <= 0) break;
+            int bytes = read(sockfd, buffer, sizeof(buffer) - 1);
+            if (bytes <= 0)
+                break;
 
             buffer[bytes] = '\0';
             int col = atoi(buffer);
@@ -52,11 +53,11 @@ void startNetworkClient(char* server_ip) {
             int col;
             int valid_input = 0;
 
-            while(!valid_input){
+            while (!valid_input) {
                 printf("Your move (1-7): ");
                 fflush(stdout);
 
-                if(scanf("%d", &col) != 1){
+                if (scanf("%d", &col) != 1) {
                     flushInput();
                     printf("Invalid input! Please enter a number.\n");
                     continue;
@@ -64,13 +65,12 @@ void startNetworkClient(char* server_ip) {
 
                 flushInput();
 
-                if(!checkChoice(col, board)){
+                if (!checkChoice(col, board)) {
                     printf("Invalid column! Try again.\n");
                 } else {
                     valid_input = 1;
                 }
             }
-            
 
             makeMove(col, 'B', board);
             numMoves++;
@@ -80,12 +80,12 @@ void startNetworkClient(char* server_ip) {
             write(sockfd, msg, strlen(msg));
         }
 
-        if(hasWinner(board, player)) {
+        if (hasWinner(board, player)) {
             printBoard(board);
             printf("Player %c wins!\n", player);
             break;
         }
-        if(BoardFull(board)) {
+        if (BoardFull(board)) {
             printBoard(board);
             printf("It's a draw!\n");
             break;
