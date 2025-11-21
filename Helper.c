@@ -191,8 +191,34 @@ void copyBoard(char dest[ROWS][COLS], char src[ROWS][COLS]) {
 
 void flushInput() {
     int c;
-    while ((c = getchar()) != '\n' && c != EOF)
-        ;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+int isValidIPv4(const char *ip) {
+    char copy[32];
+    strncpy(copy, ip, sizeof(copy)-1);
+    copy[sizeof(copy)-1] = '\0';
+
+    int num;
+    char *token = strtok(copy, ".");
+    int count = 0;
+
+    while (token != NULL) {
+        count++;
+        if (count > 4) return 0;  // too many parts
+
+        // Check if all characters are digits
+        for (int i = 0; token[i]; i++) {
+            if (token[i] < '0' || token[i] > '9') return 0;
+        }
+
+        num = atoi(token);
+        if (num < 0 || num > 255) return 0;
+
+        token = strtok(NULL, ".");
+    }
+
+    return count == 4;  // must have exactly 4 parts
 }
 
 void clearScreen() { printf("\033[H\033[J"); }

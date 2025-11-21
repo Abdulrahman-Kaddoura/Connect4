@@ -1,9 +1,4 @@
 #include "Connect4.h"
-#include <arpa/inet.h>
-#include <string.h>
-#include <unistd.h>
-
-#define PORT 4444
 
 void startNetworkServer() {
     int server_fd, client_fd;
@@ -15,8 +10,18 @@ void startNetworkServer() {
 
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
 
+    if (server_fd < 0) {
+        perror("socket failed");
+        return;
+    }
+
     int opt = 1;
-    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) <
+        0) {
+        perror("setsockopt");
+        close(server_fd);
+        return;
+    }
 
     memset(&address, 0, sizeof(address));
     address.sin_family = AF_INET;
@@ -83,7 +88,10 @@ void startNetworkServer() {
 
             char msg[16];
             snprintf(msg, sizeof(msg), "%d\n", col);
-            write(client_fd, msg, strlen(msg));
+            if (write(client_fd, msg, strlen(msg)) < 0) {
+                perror("write");
+                break;
+            }
 
         } else {
 

@@ -9,9 +9,14 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <arpa/inet.h>
+#include <string.h>
+#include <unistd.h>
 
 #define ROWS 6
 #define COLS 7
+
+#define PORT 4444
 
 #define INF 1000000
 #define WIN_SCORE 100000
@@ -47,7 +52,8 @@ void startGamePvP();
 void startGameAi(Difficulty difficulty);
 
 void startNetworkServer();
-void startNetworkClient(char *server_ip);
+void startNetworkClient();
+int isValidIPv4(const char *ip);
 
 int getAIMove(char board[ROWS][COLS], Difficulty difficulty);
 int getAIMoveEasy(char board[ROWS][COLS]);
