@@ -47,7 +47,12 @@ void startMenu() {
                 fflush(stdout);
 
                 if (fgets(ipbuf, sizeof(ipbuf), stdin)) {
-                    // REMOVE NEWLINE GOES HERE
+                    for (int i = 0; ipbuf[i] != '\0'; i++) {
+                        if (ipbuf[i] == '\n') {
+                            ipbuf[i] = '\0';
+                            break;
+                        }
+                    }
                     startNetworkClient(ipbuf);
                 }
             }
