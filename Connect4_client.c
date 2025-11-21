@@ -9,7 +9,7 @@ void startNetworkClient() {
     
     // Keep asking until a valid IP is entered
     while (1) {
-        printf("Enter server IP (e.g. 192.168.1.10 or 127.0.0.1 for localhost): ");
+        printf("Enter server IP (e.g. 192.168.1.10): ");
         fflush(stdout);
         
         if (!fgets(server_ip, sizeof(server_ip), stdin)) {
@@ -55,17 +55,11 @@ void startNetworkClient() {
     printf("Attempting to connect to %s:%d...\n", server_ip, PORT);
     if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
         perror("Connection failed");
-        printf("\nTroubleshooting tips:\n");
-        printf("1. Make sure the server is running first\n");
-        printf("2. Check if the IP address is correct\n");
-        printf("3. Verify the PORT number matches (%d)\n", PORT);
-        printf("4. Check firewall settings\n");
-        printf("5. Try using 127.0.0.1 if testing locally\n");
         close(sockfd);
         return;
     }
     
-    printf("✓ Connected to server successfully!\n\n");
+    printf("Connected to server successfully!\n\n");
     
     // Rest of your game code...
     char board[ROWS][COLS];
