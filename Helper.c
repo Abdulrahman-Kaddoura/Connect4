@@ -189,4 +189,9 @@ void copyBoard(char dest[ROWS][COLS], char src[ROWS][COLS]){
     }
 }
 
+void flushInput(){
+    int c;
+    while((c = getchar()) != '\n' && c != EOF);
+}
+
 void clearScreen() { printf("\033[H\033[J"); }

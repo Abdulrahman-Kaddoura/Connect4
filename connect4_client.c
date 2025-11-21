@@ -28,10 +28,12 @@ void startNetworkClient(char* server_ip) {
     char player = 'A';
     int numMoves = 0;
 
-    while (1) {
+    while (true) {
         printBoard(board);
 
         if (player == 'A') {
+
+            printf("Waiting for opponent...\n");
 
             char buffer[16];
             int bytes = read(sockfd, buffer, sizeof(buffer)-1);
@@ -45,14 +47,30 @@ void startNetworkClient(char* server_ip) {
 
         } else {
 
-            int col;
-            printf("Your move (1-7): ");
-            scanf("%d", &col);
+            flushInput();
 
-            while (!checkChoice(col, board)) {
-                printf("Invalid, try again: ");
-                scanf("%d", &col);
+            int col;
+            int valid_input = 0;
+
+            while(!valid_input){
+                printf("Your move (1-7): ");
+                fflush(stdout);
+
+                if(scanf("%d", &col) != 1){
+                    flushInput();
+                    printf("Invalid input! Please enter a number.\n");
+                    continue;
+                }
+
+                flushInput();
+
+                if(!checkChoice(col, board)){
+                    printf("Invalid column! Try again.\n");
+                } else {
+                    valid_input = 1;
+                }
             }
+            
 
             makeMove(col, 'B', board);
             numMoves++;
@@ -62,12 +80,12 @@ void startNetworkClient(char* server_ip) {
             write(sockfd, msg, strlen(msg));
         }
 
-        if (hasWinner(board, player)) {
+        if(hasWinner(board, player)) {
             printBoard(board);
             printf("Player %c wins!\n", player);
             break;
         }
-        if (BoardFull(board)) {
+        if(BoardFull(board)) {
             printBoard(board);
             printf("It's a draw!\n");
             break;

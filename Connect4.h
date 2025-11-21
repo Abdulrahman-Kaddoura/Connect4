@@ -39,6 +39,7 @@ void* evaluateMoveThread(void* arg);
 
 void sleepSeconds(double seconds);
 void clearScreen();
+void flushInput();
 
 void startMenu();
 void selectDifficulty();

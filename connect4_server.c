@@ -53,24 +53,28 @@ void startNetworkServer() {
         printBoard(board);
 
         if(player == 'A'){
+
             int col;
-            printf("Your move (1-7): ");
-            fflush(stdout);
-            if(scanf("%d", &col) != 1){
-                int c;
-                while((c = getchar()) != '\n' && c != EOF) {
+            int valid_input = 0;
+
+            flushInput();
+
+            while(!valid_input){
+                printf("Your move (1-7): ");
+                fflush(stdout);
+
+                if(scanf("%d", &col) != 1){
+                    flushInput();
+                    printf("Invalid input! Please enter a number.\n");
                     continue;
                 }
-            }
 
-            while(!checkChoice(col, board)){
-                printf("Invalid, try again: ");
-                fflush(stdout);
-                if(scanf("%d", &col) != 1){
-                    int c;
-                    while((c = getchar()) != '\n' && c != EOF){
-                        continue;
-                    }
+                flushInput();
+
+                if(!checkChoice(col, board)){
+                    printf("Invalid column, try again: ");
+                } else{
+                    valid_input = 1;
                 }
             }
 
@@ -82,8 +86,11 @@ void startNetworkServer() {
             write(client_fd, msg, strlen(msg));
             
         } else {
+
+            printf("Waiting for opponent...\n");
+
             char buffer[16];
-            ssize_t bytes = read(client_fd, buffer, sizeof(buffer)-1);
+            int bytes = read(client_fd, buffer, sizeof(buffer)-1);
             if (bytes <= 0) {
                 printf("Client disconnected or read error.\n");
                 break;
@@ -92,10 +99,6 @@ void startNetworkServer() {
             buffer[bytes] = '\0';
             int col = atoi(buffer);
 
-            if (!checkChoice(col, board)) {
-                printf("Received invalid column %d from client.\n", col);
-                break;
-            }
             makeMove(col, 'B', board);
             numMoves++;
         }
