@@ -15,6 +15,9 @@ void startNetworkServer() {
 
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
 
+    int opt = 1;
+    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+
     memset(&address, 0, sizeof(address));
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
@@ -55,7 +58,9 @@ void startNetworkServer() {
             fflush(stdout);
             if(scanf("%d", &col) != 1){
                 int c;
-                while((c = getchar()) != '\n' && c != EOF) continue;
+                while((c = getchar()) != '\n' && c != EOF) {
+                    continue;
+                }
             }
 
             while(!checkChoice(col, board)){
@@ -97,7 +102,7 @@ void startNetworkServer() {
 
         if(hasWinner(board, player)){
             printBoard(board);
-            printf("PLayer %c wins!\n", player);
+            printf("\nPlayer %c wins!\n", player);
             break;
         }
         if(BoardFull(board)){
