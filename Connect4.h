@@ -8,6 +8,8 @@
 #include <time.h>
 #include <unistd.h>
 #include <limits.h>
+#include <pthread.h>
+
 
 #define ROWS 6
 #define COLS 7
@@ -21,6 +23,19 @@
 #define COLOR_YELLOW "\033[33m"
 
 typedef enum Difficulty { EASY = 1, MEDIUM, HARD } Difficulty;
+
+typedef struct {
+    char board[ROWS][COLS];
+    int col;
+    int score;
+    int searchDepth;
+    char bot;
+    char human;
+} ThreadData;
+
+void copyBoard(char dest[ROWS][COLS], char src[ROWS][COLS]);
+int getAIMoveHard_MT(char board[ROWS][COLS]);
+void* evaluateMoveThread(void* arg);
 
 void sleepSeconds(double seconds);
 void clearScreen();

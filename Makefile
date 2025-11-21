@@ -7,6 +7,7 @@ CC = gcc
 
 # Compiler flags
 CFLAGS = -Wall -Werror -g
+LDFLAGS = -lpthread
 
 # Source files
 SRCS = Connect4.c main.c Helper.c AIMoves.c
@@ -16,11 +17,11 @@ all: $(TARGET)
 
 # Build the normal executable
 $(TARGET): $(SRCS)
-	$(CC) $(CFLAGS) $(SRCS) -o $(TARGET)
+	$(CC) $(CFLAGS) $(SRCS) -o $(TARGET) $(LDFLAGS)
 
 # Build the test bots executable
 $(TEST_TARGET): $(SRCS)
-	$(CC) $(CFLAGS) -DTEST_BOTS $(SRCS) -o $(TEST_TARGET)
+	$(CC) $(CFLAGS) -DTEST_BOTS $(SRCS) -o $(TEST_TARGET) $(LDFLAGS)
 
 # Clean compiled files
 clean:
