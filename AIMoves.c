@@ -455,7 +455,6 @@ int getAIMoveHard_MT(char board[ROWS][COLS]) {
     return bestMove;
 }
 // Time Complexity of Hard Bot:
-// - Worst-case Negamax: O(b^d), where b ≈ (columns), d = (search depth)
-// - With alpha-beta pruning: best case O(b^(d/2)) 
-//   → drastically reduces nodes to a few thousand
-// - Move ordering (center-first) improves pruning efficiency
+// - Worst-case Negamax: O(b^d), where b = number of possible moves, d = search depth
+// Alpha beta pruning can cut this down significantly.
+// - Move ordering (starting from center) helps reduce the number of positions checked
