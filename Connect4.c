@@ -58,7 +58,7 @@ void startMenu() {
             }
 
             else {
-                printf("Invalid choice! Please enter P or A,\n");
+                printf("Invalid choice! Please enter L, A, S, or C,\n");
                 sleepSeconds(1);
             }
         }
