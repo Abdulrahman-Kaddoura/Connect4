@@ -113,7 +113,8 @@ int getAIMoveMedium(char board[ROWS][COLS]) {
     }
 
     return 4; // it never reaches this
-}
+}    
+    // TIME COMPLEXITY FOR MEDIUM MODE: O(R·C²) because the algorithm runs three full loops over all C columns, and in each iteration it performs a simulateMove() board copy costing O(R·C), so we multiply the C iterations by the O(R·C) copy cost, giving C × (R·C) = R·C².
 
 //-------------------------------------------------
 // everything used for hard move here
