@@ -386,7 +386,7 @@ int getAIMoveHard_MT(char board[ROWS][COLS]) {
         makeMove(col, bot, board);
         if (hasWinner(board, bot)) {
             undoMove(col, board);
-            printf("DEBUG: Found immediate win in column %d\n", col);
+            printf("\nDEBUG: Found immediate win in column %d\n", col);
             return col;
         }
         undoMove(col, board);
@@ -455,8 +455,7 @@ int getAIMoveHard_MT(char board[ROWS][COLS]) {
             bestMove = threadData[i].col;
         }
     }
-    // printf("DEBUG: Best move: column %d with score %d\n", bestMove,
-    // bestScore);
+    printf("\nDEBUG: Best move: column %d with score %d\n", bestMove,bestScore);
 
     if (activeThreads == 0) {
 
