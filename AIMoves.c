@@ -114,7 +114,10 @@ int getAIMoveMedium(char board[ROWS][COLS]) {
 
     return 4; // it never reaches this
 }    
-    // TIME COMPLEXITY FOR MEDIUM MODE: O(R·C²) because the algorithm runs three full loops over all C columns, and in each iteration it performs a simulateMove() board copy costing O(R·C), so we multiply the C iterations by the O(R·C) copy cost, giving C × (R·C) = R·C².
+    // TIME COMPLEXITY FOR MEDIUM MODE: O(R·C²) 
+    //because the algorithm runs three full loops over all C columns, 
+    //and in each iteration it performs a simulateMove() board copy costing O(R·C), 
+    //so we multiply the C iterations by the O(R·C) copy cost, giving C × (R·C) = R·C².
 
 //-------------------------------------------------
 // everything used for hard move here
@@ -451,3 +454,8 @@ int getAIMoveHard_MT(char board[ROWS][COLS]) {
 
     return bestMove;
 }
+// Time Complexity of Hard Bot:
+// - Worst-case Negamax: O(b^d), where b ≈ (columns), d = (search depth)
+// - With alpha-beta pruning: best case O(b^(d/2)) 
+//   → drastically reduces nodes to a few thousand
+// - Move ordering (center-first) improves pruning efficiency
