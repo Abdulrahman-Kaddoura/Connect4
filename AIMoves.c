@@ -300,6 +300,8 @@ static int negamax_strong(char board[ROWS][COLS], int depth, int alpha,
     return best;
 }
 
+//this is the sequential version with no multithreading
+
 int getAIMoveHard_sequential(char board[ROWS][COLS]) {
     char bot = 'B';
     char human = 'A';
@@ -332,7 +334,7 @@ int getAIMoveHard_sequential(char board[ROWS][COLS]) {
         undoMove(col, board);
     }
 
-    int searchDepth = 7;
+    int searchDepth = 100;
 
     int moves[COLS];
     int mcount;
@@ -412,7 +414,7 @@ int getAIMoveHard_MT(char board[ROWS][COLS]) {
     pthread_t threads[COLS];
     ThreadData threadData[COLS];
     int activeThreads = 0;
-    int searchDepth = 7;
+    int searchDepth = 12;
 
     // here we create threads for each valid move
     int moves[COLS];
